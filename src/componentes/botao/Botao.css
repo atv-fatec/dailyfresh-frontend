@@ -1,0 +1,15 @@
+.botao-container{
+    text-align: center;
+}
+
+.botao-style{
+    color: #FFFFFF;
+    border: none !important;
+    border-radius: 5px !important;
+    font-family: 'Questrial', sans-serif !important;
+    font-size: 20px;
+    background-color: #FFBB6C !important;
+    width: 200px;
+    height: 44px;
+    margin: 10px 0px 20px 0px;
+}

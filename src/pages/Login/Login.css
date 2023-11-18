@@ -1,0 +1,38 @@
+.login-cadastro{
+    font-family: 'Questrial', sans-serif !important;
+    text-align: center;
+}
+
+.login-container{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 98vh;
+}
+
+.login-form{
+    margin: 0 auto;
+    width: 50%;
+}
+
+.login-container-logo{
+    text-align: center;
+    width: 100%;
+    margin-bottom: 30px;;
+}
+
+.login-logo{
+    display: inline-block;
+    width: 65%;
+}
+
+.login-image{
+    width: 100%;
+    background-image: url("../../assets/image-food.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 98vh; 
+}

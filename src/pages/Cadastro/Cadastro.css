@@ -1,0 +1,28 @@
+.cad-container{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 98vh;
+}
+
+.cad-form{
+    margin: 0 auto;
+    width: 50%;
+}
+
+.cad-container-logo{
+    text-align: center;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.cad-logo{
+    display: inline-block;
+    width: 65%;
+}
+
+.termo{
+    font-family: 'Questrial', sans-serif !important;
+}

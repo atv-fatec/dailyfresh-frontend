@@ -1,0 +1,19 @@
+.user-container{
+    margin-top: 30px;;
+}
+
+.user-titles{
+    font-family: 'Playfair Display', serif;
+    color: #297373;
+}
+
+.user-info{
+    font-family: 'Questrial', sans-serif !important;
+    color: #879797;
+}
+
+hr{
+    border-color: #FF8552 !important;
+    border-width: 1px !important;
+    opacity: 1
+}

@@ -1,0 +1,60 @@
+.home-banner{
+    width: 100%;
+    height: 312px;
+    background-color: #297373;
+}
+
+.home-banner-container{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 100%;
+}
+
+.home-banner-cont{
+    width: 70%;
+    margin: 0 auto;
+}
+
+.home-container{
+    margin-top: 50px;
+}
+
+.tiltle-principal{
+    font-weight: 700;
+}
+
+.home-banner-title{
+    font-family: 'Playfair Display', serif;
+    color: #ffff;
+    font-weight: 600;
+    text-align: center;
+}
+
+.home-container-card{
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.home-card{
+    background-color: #F1ECEE !important;
+    border: none !important;
+    margin-bottom: 30px;;
+}
+
+.home-card-title{
+    font-family: 'Playfair Display', serif;
+    color: #297373 !important;
+}
+
+.home-card-price{
+    font-family: 'Questrial', sans-serif !important;
+    color: #FF8552 !important;
+    font-size: 18px !important;
+}

@@ -1,0 +1,13 @@
+.df-navbar{
+    background-color: #39393A;
+}
+
+.navbar-logo{
+    width: 240px;
+}
+
+.navbar-itens{
+    color: #FFFF !important;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px !important;
+}

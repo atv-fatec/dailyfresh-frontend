@@ -1,0 +1,21 @@
+.input-style{
+    color: #879797 !important;
+    font-family: 'Questrial', sans-serif !important;
+    border: none !important;
+    border-radius: 5px !important;
+    background: #FFF !important;
+    box-shadow: 0px 4px 4px 0px rgba(41, 115, 115, 0.42) !important;
+}
+
+.form-control:focus {
+    border: none !important;
+    border-radius: 5px !important;
+    background: #FFF !important;
+    border-color: #297373 !important;
+    box-shadow: 0 0 0 0.25rem rgba(41, 115, 115, 0.42) !important;
+}
+
+.input-icon{
+    color: #297373 !important;
+    margin-right: 10px;
+}
