@@ -1,6 +1,14 @@
+.login-row{
+    height: fit-content !important
+}
+
 .login-cadastro{
     font-family: 'Questrial', sans-serif !important;
     text-align: center;
+}
+
+.cad-container{
+    height: fit-content !important;
 }
 
 .login-container{
@@ -29,10 +37,10 @@
 }
 
 .login-image{
-    width: 100%;
-    background-image: url("../../assets/image-food.jpg");
+    background-image: url("../../assets/logos/dailyfresh.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    height: 98vh; 
+    height: 115vh !important;
+    background-color: blue;
 }

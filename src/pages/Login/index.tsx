@@ -1,15 +1,24 @@
-import { Col, Image, Row } from "react-bootstrap";
+import { Button, Col, Form, FormFloating, Image, Row } from "react-bootstrap";
 import { Botao, Input } from "../../componentes";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import "./Login.css"
 import { branco } from "../../assets";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export function Login() {
     const navigate = useNavigate();
+    const [validated, setValidated] = useState(false);
 
-    const handleLogInClick = () => {
-        navigate('/home');
+    const handleSubmit = (event:any) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else{
+            navigate("/home")
+        }
+        setValidated(true);
       };
 
     return(
@@ -24,9 +33,11 @@ export function Login() {
                             <div className="login-container-logo">
                                 <Image src={branco} rounded className="login-logo"/>
                             </div>
-                            <Input label={"Email"} type={"email"} placeholder={"usuario@email.com"} icon={faEnvelope}/>
-                            <Input label={"Senha"} type={"password"} placeholder={""} icon={faLock}/>
-                            <Botao label="Log In" id="login-btn" OnClick={handleLogInClick}/>
+                            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                                <Input label={"Email"} type={"email"} placeholder={"usuario@email.com"} icon={faEnvelope} cid={"idEmail"} error="Por favor, insira o email"/>
+                                <Input label={"Senha"} type={"password"} placeholder={""} icon={faLock} cid={"idSenha"} error="Por favor, insira a senha"/>
+                                <Botao label="Log In" id="login-btn" type="submit"/>
+                            </Form>
                             <div className="login-container-cad">
                                 <p className="login-cadastro">Não possui cadastro? <a href="/cadastro">Cadastre-se aqui!</a></p>
                             </div>

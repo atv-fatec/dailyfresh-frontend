@@ -9,6 +9,7 @@ const card = require("./card_image.jpg")
 const card2 = require("./card_image2.jpg")
 const card3 = require("./card_image3.jpg")
 const card4 = require("./card_image4.jpg")
+const cl = require("./lc_image.jpg")
 
 export{
     preto,
@@ -22,4 +23,5 @@ export{
     card2,
     card3,
     card4,
+    cl
 }

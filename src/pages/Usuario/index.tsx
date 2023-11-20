@@ -20,8 +20,8 @@ export function Usuario() {
                 <h4 className="user-titles">Email</h4>
                 <p className="user-info">Informação</p>
                 <hr/>
-                <Botao label={"Log Out"} id={"logout-btn"}/>
                 <Botao label={"Editar"} id={"edit-btn"} OnClick={() => setModalShow(true)}/>
+                <Botao label={"Log Out"} id={"logout-btn"}/>
                 <ModalEdit 
                     OnHide={() => setModalShow(false)} 
                     Show={modalShow}

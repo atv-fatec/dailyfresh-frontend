@@ -7,7 +7,7 @@ export function Botao(props: IBotao){
     return(
         <>
             <div className="botao-container">
-                    <Button className="botao-style" id={props.id} onClick={props.OnClick}>
+                    <Button className="botao-style" id={props.id} onClick={props.OnClick} type={props.type}>
                         {props.label}
                     </Button>
             </div>

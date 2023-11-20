@@ -5,4 +5,6 @@ export interface IInput{
     type: string
     placeholder: string
     icon: IconProp
+    cid: string
+    error?: string
 }

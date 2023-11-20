@@ -3,4 +3,5 @@ export interface IBotao{
     id: string
     link?: string
     OnClick?: () => void;
+    type?: "button" | "submit" | "reset" | undefined
 }

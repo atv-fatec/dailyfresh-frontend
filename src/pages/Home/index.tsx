@@ -87,7 +87,7 @@ export function Home() {
         <div className="home-banner">
             <Container className="home-banner-container">
                 <div className="home-banner-cont">
-                    <Input label={"Pesquisar..."} type={"text"} placeholder={"nome dos pratos"} icon={faMagnifyingGlass}/>
+                    <Input label={"Pesquisar..."} type={"text"} placeholder={"nome dos pratos"} icon={faMagnifyingGlass} cid={""}/>
                     <h2 className="home-banner-title">Explore nossos pratos!</h2>
                 </div>
             </Container>
