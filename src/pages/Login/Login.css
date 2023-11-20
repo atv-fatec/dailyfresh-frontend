@@ -41,6 +41,6 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    height: 115vh !important;
+    height: 100% !important;
     background-color: blue;
 }
