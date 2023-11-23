@@ -39,7 +39,7 @@ export function Login() {
                                 <Botao label="Log In" id="login-btn" type="submit"/>
                             </Form>
                             <div className="login-container-cad">
-                                <p className="login-cadastro">Não possui cadastro? <a href="/cadastro">Cadastre-se aqui!</a></p>
+                                <p className="login-cadastro">Não possui cadastro? <a href="/cadastro" className="log-cad">Cadastre-se aqui!</a></p>
                             </div>
                         </div>
                     </div>
