@@ -7,7 +7,8 @@ export function ModalTermos(props: IModal) {
     const [modalShow, setModalShow] = useState(false);
     const [aceitaSMS, setAceitaSMS] = useState(false);
     const [aceitaEmail, setAceitaEmail] = useState(false);
-    const [aceitaWhatsApp, setAceitaWhatsApp] = useState(false);
+    const [aceitaDados, setAceitaDados] = useState(false);
+    const [aceitaPropaganda, setAceitaPropaganda] = useState(false);
 
     const handleAceitar = () => {
         setModalShow(false);
@@ -17,7 +18,8 @@ export function ModalTermos(props: IModal) {
     const handleRecusar = () => {
         setAceitaSMS(false);
         setAceitaEmail(false);
-        setAceitaWhatsApp(false);
+        setAceitaPropaganda(false);
+        setAceitaDados(false);
         props.OnHide();
     };
 
@@ -40,6 +42,14 @@ export function ModalTermos(props: IModal) {
                     <Form>
                         <Form.Check
                             type="switch"
+                            id="aceitarDados"
+                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento"
+                            checked={aceitaDados}
+                            onChange={() => setAceitaDados(!aceitaDados)}
+                            className="custom-switch"
+                        />
+                        <Form.Check
+                            type="switch"
                             id="aceitarSMS"
                             label="Aceitar receber SMS"
                             checked={aceitaSMS}
@@ -56,17 +66,16 @@ export function ModalTermos(props: IModal) {
                         />
                         <Form.Check
                             type="switch"
-                            id="aceitarWhatsApp"
-                            label="Aceitar receber mensagens no WhatsApp"
-                            checked={aceitaWhatsApp}
-                            onChange={() => setAceitaWhatsApp(!aceitaWhatsApp)}
+                            id="aceitarPropaganda"
+                            label="Aceitar receber propaganda"
+                            checked={aceitaPropaganda}
+                            onChange={() => setAceitaPropaganda(!aceitaPropaganda)}
                             className="custom-switch"
                         />
-
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleRecusar} className="btn-recusar">Recusar</Button>
+                    <Button onClick={handleRecusar} className="btn-recusar">Recusar todas</Button>
                     <Button onClick={handleAceitar} className="btn-aceitar">Aceitar</Button>
                 </Modal.Footer>
             </Modal>

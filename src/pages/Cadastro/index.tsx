@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { branco } from "../../assets";
 import { Input, Botao } from "../../componentes";
 import { ModalTermos } from "../../componentes/modalTermos/modalTermos";
+import "./Cadastro.css"
 
 export function Cadastro() {
     const navigate = useNavigate();
@@ -51,8 +52,8 @@ export function Cadastro() {
                                     required
                                     feedback="Você deve aceitar os termos para se cadastrar"
                                     feedbackType="invalid"
-                                    onClick={handleTermosClick}
                                 />
+                                <a onClick={handleTermosClick} className="termos-modal">Saiba mais sobre os Termos aqui!</a>
                                 <Botao label="Sign Up" id="signup-btn" type="submit" />
                             </Form>
                         </div>
