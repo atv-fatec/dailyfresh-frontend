@@ -11,7 +11,7 @@ export function Input(props: IInput){
                 label={<span className="input-label"><FontAwesomeIcon icon={props.icon} size="lg" className="input-icon"/> {props.label}</span>}
                 className="mb-3 input-style"
             >
-                <Form.Control type={props.type} placeholder={props.placeholder} required/>
+                <Form.Control type={props.type} placeholder={props.placeholder} required onChange={props.onChange} name={props.name}/>
                 <Form.Control.Feedback type="invalid">{props.error}</Form.Control.Feedback>
             </FloatingLabel>
         </>

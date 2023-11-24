@@ -1,25 +1,40 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import { useState } from "react";
-import { IModal } from "../../interface/modal";
+import { IModalTermos } from "../../interface/modalTermos";
 import "./modal.css";
 
-export function ModalTermos(props: IModal) {
-    const [modalShow, setModalShow] = useState(false);
-    const [aceitaSMS, setAceitaSMS] = useState(false);
-    const [aceitaEmail, setAceitaEmail] = useState(false);
-    const [aceitaDados, setAceitaDados] = useState(false);
-    const [aceitaPropaganda, setAceitaPropaganda] = useState(false);
+export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
+    const { formData, setFormData } = props;
 
     const handleAceitar = () => {
-        setModalShow(false);
+        const updatedFormData = {
+            ...formData,
+            termos: {
+                armazenamentoDados: true,
+                pagamentoDados: true,
+                propagandas: true,
+                envioEmail: true,
+                envioSms: true,
+            }
+        };
+
+        setFormData(updatedFormData);
         props.OnHide();
     };
 
     const handleRecusar = () => {
-        setAceitaSMS(false);
-        setAceitaEmail(false);
-        setAceitaPropaganda(false);
-        setAceitaDados(false);
+        const updatedFormData = {
+            ...formData,
+            termos: {
+                armazenamentoDados: false,
+                pagamentoDados: false,
+                propagandas: false,
+                envioEmail: false,
+                envioSms: false,
+            }
+        };
+
+        setFormData(updatedFormData);
         props.OnHide();
     };
 
@@ -38,38 +53,74 @@ export function ModalTermos(props: IModal) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+                    <p>Lorem Ipsum...</p>
                     <Form>
                         <Form.Check
                             type="switch"
                             id="aceitarDados"
                             label="Aceitar armazenamento de dados e armazenamento de dados de pagamento"
-                            checked={aceitaDados}
-                            onChange={() => setAceitaDados(!aceitaDados)}
+                            checked={formData.termos.armazenamentoDados}
+                            onChange={() => {
+                                const updatedFormData = {
+                                    ...formData,
+                                    termos: {
+                                        ...formData.termos,
+                                        armazenamentoDados: !formData.termos.armazenamentoDados,
+                                    }
+                                };
+                                setFormData(updatedFormData);
+                            }}
                             className="custom-switch"
                         />
                         <Form.Check
                             type="switch"
                             id="aceitarSMS"
                             label="Aceitar receber SMS"
-                            checked={aceitaSMS}
-                            onChange={() => setAceitaSMS(!aceitaSMS)}
+                            checked={formData.termos.envioSms}
+                            onChange={() => {
+                                const updatedFormData = {
+                                    ...formData,
+                                    termos: {
+                                        ...formData.termos,
+                                        envioSms: !formData.termos.envioSms,
+                                    }
+                                };
+                                setFormData(updatedFormData);
+                            }}
                             className="custom-switch"
                         />
                         <Form.Check
                             type="switch"
                             id="aceitarEmail"
                             label="Aceitar receber emails"
-                            checked={aceitaEmail}
-                            onChange={() => setAceitaEmail(!aceitaEmail)}
+                            checked={formData.termos.envioEmail}
+                            onChange={() => {
+                                const updatedFormData = {
+                                    ...formData,
+                                    termos: {
+                                        ...formData.termos,
+                                        envioEmail: !formData.termos.envioEmail,
+                                    }
+                                };
+                                setFormData(updatedFormData);
+                            }}
                             className="custom-switch"
                         />
                         <Form.Check
                             type="switch"
                             id="aceitarPropaganda"
                             label="Aceitar receber propaganda"
-                            checked={aceitaPropaganda}
-                            onChange={() => setAceitaPropaganda(!aceitaPropaganda)}
+                            checked={formData.termos.propagandas}
+                            onChange={() => {
+                                const updatedFormData = {
+                                    ...formData,
+                                    termos: {
+                                        ...formData.termos,
+                                        propagandas: !formData.termos.propagandas,
+                                    }
+                                };
+                                setFormData(updatedFormData);
+                            }}
                             className="custom-switch"
                         />
                     </Form>
