@@ -5,6 +5,7 @@ import "./Login.css"
 import { branco } from "../../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 export function Login() {
     const navigate = useNavigate();
@@ -16,10 +17,29 @@ export function Login() {
           event.preventDefault();
           event.stopPropagation();
         } else{
+            event.preventDefault();
+            event.stopPropagation();
+            handleLogin(event.target.idEmail.value, event.target.idSenha.value);
             navigate("/home")
         }
         setValidated(true);
       };
+
+      const handleLogin = async (email: string, senha: string) => {
+        try {
+            const response = await axios.post("http://localhost:5000/user/login", {
+                email,
+                senha
+            });
+    
+            const userData = JSON.stringify(response.data);
+    
+            localStorage.setItem("usuario", userData);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    
 
     return(
         <>
