@@ -1,7 +1,7 @@
-import { Button, Col, Form, FormFloating, Image, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Row } from "react-bootstrap";
 import { Botao, Input } from "../../componentes";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-import "./Login.css"
+import "./Login.css";
 import { branco } from "../../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -10,36 +10,42 @@ import axios from "axios";
 export function Login() {
     const navigate = useNavigate();
     const [validated, setValidated] = useState(false);
+    const [loginError, setLoginError] = useState("");
 
-    const handleSubmit = (event:any) => {
+    const handleSubmit = async (event: any) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        } else{
             event.preventDefault();
             event.stopPropagation();
-            handleLogin(event.target.idEmail.value, event.target.idSenha.value);
-            navigate("/home")
+        } else {
+            event.preventDefault();
+            event.stopPropagation();
+            try {
+                const response = await handleLogin(event.target.idEmail.value, event.target.idSenha.value);
+                
+                const userData = JSON.stringify(response.data);
+                localStorage.setItem("usuario", userData);
+                navigate("/home");
+            } catch (error) {
+                console.error(error);
+                setLoginError("Usuário ou senha inválidos. Por favor, tente novamente.");
+            }
         }
         setValidated(true);
-      };
-
-      const handleLogin = async (email: string, senha: string) => {
+    };
+    
+    const handleLogin = async (email: string, senha: string) => {
         try {
             const response = await axios.post("http://localhost:5000/user/login", {
                 email,
                 senha
             });
-    
-            const userData = JSON.stringify(response.data);
-    
-            localStorage.setItem("usuario", userData);
+
+            return response; 
         } catch (error) {
-            console.error(error);
+            throw error;
         }
     }
-    
 
     return(
         <>
@@ -57,6 +63,7 @@ export function Login() {
                                 <Input label={"Email"} type={"email"} placeholder={"usuario@email.com"} icon={faEnvelope} cid={"idEmail"} error="Por favor, insira o email"/>
                                 <Input label={"Senha"} type={"password"} placeholder={""} icon={faLock} cid={"idSenha"} error="Por favor, insira a senha"/>
                                 <Botao label="Log In" id="login-btn" type="submit"/>
+                                {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
                             </Form>
                             <div className="login-container-cad">
                                 <p className="login-cadastro">Não possui cadastro? <a href="/cadastro">Cadastre-se aqui!</a></p>
