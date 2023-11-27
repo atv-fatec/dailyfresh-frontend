@@ -67,6 +67,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                                     termos: {
                                         ...formData.termos,
                                         armazenamentoDados: !formData.termos.armazenamentoDados,
+                                        pagamentoDados: !formData.termos.pagamentoDados,
                                     }
                                 };
                                 setFormData(updatedFormData);
