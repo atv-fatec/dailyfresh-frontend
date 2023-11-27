@@ -19,6 +19,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
         };
 
         setFormData(updatedFormData);
+        props.OnAccept();
         props.OnHide();
     };
 

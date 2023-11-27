@@ -9,4 +9,5 @@ export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     error?: string
     onChange?: (event: any) => void
     name?: string
+    value?: string
 }

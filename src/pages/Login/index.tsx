@@ -25,10 +25,10 @@ export function Login() {
                 
                 const userData = JSON.stringify(response.data);
                 localStorage.setItem("usuario", userData);
+    
                 navigate("/home");
             } catch (error) {
                 console.error(error);
-                setLoginError("Usuário ou senha inválidos. Por favor, tente novamente.");
             }
         }
         setValidated(true);
@@ -36,12 +36,12 @@ export function Login() {
     
     const handleLogin = async (email: string, senha: string) => {
         try {
-            const response = await axios.post("http://localhost:5000/user/login", {
+            const response = await axios.post("http://localhost:1220/user/login", {
                 email,
                 senha
             });
-
-            return response; 
+    
+            return response;
         } catch (error) {
             throw error;
         }

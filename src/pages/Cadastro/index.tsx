@@ -7,6 +7,7 @@ import { Input, Botao } from "../../componentes";
 import { ModalTermos } from "../../componentes/modalTermos/modalTermos";
 import "./Cadastro.css";
 import axios from "axios";
+import { UserData } from "../../interface/dadosUsuario";
 
 export function Cadastro() {
     const navigate = useNavigate();
@@ -40,11 +41,9 @@ export function Cadastro() {
             return;
         }
 
-        console.log("oiiiii", formData);
-
         try {
-            const response = await axios.post('http://localhost:5000/user/create', formData);
-            navigate("/"); 
+            const response = await axios.post('http://localhost:1220/user/create', formData);
+            navigate("/");
         } catch (error) {
             console.error('Erro ao enviar dados:', error);
         }
@@ -52,7 +51,6 @@ export function Cadastro() {
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        console.log("target", event.target);
         setFormData({
             ...formData,
             [name]: value,
@@ -65,11 +63,11 @@ export function Cadastro() {
 
     const handleAcceptTerms = () => {
         setShowModal(false);
-        setAcceptedTerms(true);
-        setFormData({
-            ...formData,
+        setFormData(prevData => ({
+            ...prevData,
             aceitaTermos: true,
-        })
+        }));
+        setAcceptedTerms(true);
     };
 
     return (
@@ -82,21 +80,75 @@ export function Cadastro() {
                                 <Image src={branco} rounded className="cad-logo" />
                             </div>
                             <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                            <Input label={"Nome"} type={"text"} placeholder={"nome"} icon={faUser} cid={"idNome"} error="O campo nome é obrigatório" onChange={handleInputChange} name={"nome"}/>
                                 <Input 
-                                label={"CPF"} 
-                                type={"number"} 
-                                placeholder={"123.456.789-01"} 
-                                icon={faIdCard} 
-                                cid={"idCPF"} 
-                                error="O campo CPF é obrigatório" 
-                                onChange={handleInputChange} 
-                                name={"cpf"}/>
-                                <Input label={"Data de nascimento"} type={"date"} placeholder={""} icon={faCalendar} cid={"idData"} error="O campo data de nascimento é obrigatório" onChange={handleInputChange} name={"dataNascimento"}/>
-                                <Input label={"Telefone"} type={"telephone"} placeholder={"(12) 12345-6789"} icon={faMobileScreen} cid={"idTel"} error="O campo telefone é obrigatório" onChange={handleInputChange} name={"telefone"}/>
-                                <Input label={"Email"} type={"email"} placeholder={"usuario@email.com"} icon={faEnvelope} cid={"idEmailC"} error="O campo email é obrigatório" onChange={handleInputChange} name={"email"}/>
-                                <Input label={"Senha"} type={"password"} placeholder={""} icon={faLock} cid={"idSenhaC"} error="O campo senha é obrigatório" onChange={handleInputChange} name={"senha"}/>
-                                <Input label={"Repetir senha"} type={"password"} placeholder={""} icon={faLock} cid={"idSenhaC2"} error="O campo senha é obrigatório"/>
+                                    label={"Nome"} 
+                                    type={"text"} 
+                                    placeholder={"nome"} 
+                                    icon={faUser} 
+                                    cid={"idNome"} 
+                                    error="O campo nome é obrigatório" 
+                                    onChange={handleInputChange} 
+                                    name={"nome"}
+                                 />
+                                <Input
+                                    label={"CPF"}
+                                    type={"number"}
+                                    placeholder={"123.456.789-01"}
+                                    icon={faIdCard}
+                                    cid={"idCPF"}
+                                    error="O campo CPF é obrigatório"
+                                    onChange={handleInputChange}
+                                    name={"cpf"}
+                                />
+                                <Input
+                                    label={"Data de nascimento"}
+                                    type={"date"}
+                                    placeholder={""}
+                                    icon={faCalendar}
+                                    cid={"idData"}
+                                    error="O campo data de nascimento é obrigatório"
+                                    onChange={handleInputChange}
+                                    name={"dataNascimento"}
+                                />
+                                <Input
+                                    label={"Telefone"}
+                                    type={"telephone"}
+                                    placeholder={"(12) 12345-6789"}
+                                    icon={faMobileScreen}
+                                    cid={"idTel"}
+                                    error="O campo telefone é obrigatório"
+                                    onChange={handleInputChange}
+                                    name={"telefone"}
+                                />
+                                <Input 
+                                    label={"Email"} 
+                                    type={"email"} 
+                                    placeholder={"usuario@email.com"} 
+                                    icon={faEnvelope} cid={"idEmailC"} 
+                                    error="O campo email é obrigatório" 
+                                    onChange={handleInputChange} 
+                                    name={"email"} 
+                                />
+                                <Input 
+                                    label={"Senha"} 
+                                    type={"password"} 
+                                    placeholder={""} 
+                                    icon={faLock} 
+                                    cid={"idSenhaC"} 
+                                    error="O campo senha é obrigatório" 
+                                    onChange={handleInputChange} 
+                                    name={"senha"} 
+                                />
+                                <Input 
+                                    label={"Repetir senha"} 
+                                    type={"password"} 
+                                    placeholder={""} 
+                                    icon={faLock} 
+                                    cid={"idSenhaC2"}
+                                    error="O campo senha é obrigatório" 
+                                    name={"repetirSenha"}
+                                    onChange={handleInputChange}
+                                 />
                                 <Form.Check
                                     className="termo"
                                     type="checkbox"
@@ -106,11 +158,23 @@ export function Cadastro() {
                                     feedback="Você deve aceitar os termos para se cadastrar"
                                     feedbackType="invalid"
                                     checked={acceptedTerms}
-                                    onChange={() => setAcceptedTerms(!acceptedTerms)}
+                                    onChange={(e) => {
+                                        setAcceptedTerms(e.target.checked);
+                                        setFormData(prevData => ({
+                                            ...prevData,
+                                            aceitaTermos: e.target.checked,
+                                        }));
+                                    }}
                                     name="aceitaTermos"
                                 />
-                                <a onClick={handleTermosClick} className="termos-modal">Saiba mais sobre os Termos aqui!</a>
-                                <Botao label="Sign Up" id="signup-btn" type="submit" disabled={!acceptedTerms} />
+                                <a onClick={handleTermosClick} 
+                                className="termos-modal">Saiba mais sobre os Termos aqui!</a>
+                                <Botao 
+                                    label="Sign Up" 
+                                    id="signup-btn" 
+                                    type="submit" 
+                                    disabled={!acceptedTerms}
+                                 />
                             </Form>
                         </div>
                     </div>
