@@ -5,7 +5,7 @@ export default function Routes() {
     return(
         <Switch>
             <Route path="/" element={<Login />}></Route>
-            <Route path="/cadastro" element={<Cadastro />}></Route>
+            <Route path="/cadastro" element={<Cadastro/>}></Route>
             <Route path="/home" element={<Home />}></Route>
             <Route path="/usuario" element={<Usuario />}></Route>
         </Switch>
