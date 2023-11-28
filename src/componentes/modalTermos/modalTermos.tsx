@@ -5,6 +5,7 @@ import "./modal.css";
 
 export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
     const { formData, setFormData } = props;
+    const [validated, setValidated] = useState(false);
 
     const handleAceitar = () => {
         const updatedFormData = {
@@ -55,7 +56,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 </Modal.Header>
                 <Modal.Body>
                     <p>Lorem Ipsum...</p>
-                    <Form>
+                    <Form noValidate validated={validated}>
                         <Form.Check
                             type="switch"
                             id="aceitarDados"

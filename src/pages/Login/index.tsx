@@ -25,7 +25,7 @@ export function Login() {
                 
                 const userData = JSON.stringify(response.data);
                 localStorage.setItem("usuario", userData);
-    
+                console.log(response.data)
                 navigate("/home");
             } catch (error) {
                 console.error(error);
@@ -36,14 +36,16 @@ export function Login() {
     
     const handleLogin = async (email: string, senha: string) => {
         try {
-            const response = await axios.post("http://localhost:1220/user/login", {
+            const response = await axios.post("http://localhost:7890/user/login", {
                 email,
                 senha
             });
     
             return response;
         } catch (error) {
+            console.log("ERRO!!!")
             throw error;
+            
         }
     }
 

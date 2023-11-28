@@ -6,16 +6,28 @@ import { IModal } from "../../interface/modal";
 import { Botao } from "..";
 import "./modal.css"
 import axios from "axios";
+import { UserData } from "../../interface/dadosUsuario";
 
 export function ModalEdit(props: IModal) {
     const [modalShow, setModalShow] = useState(false);
     const [validated, setValidated] = useState(false);
+    const userData: string | null = localStorage.getItem("usuario");
+    const userObject = JSON.parse(userData || "{}") as UserData ;
     const [formData, setFormData] = useState({
         nome: '',
         //email: '',
         dataNascimento: '',
         telefone: '',
-        senha: '',
+        senha: ''
+    });
+    const [termoData, setTermoData] = useState({
+        termos: {
+            armazenamentoDados: false,
+            pagamentoDados: false,
+            propagandas: false,
+            envioEmail: false,
+            envioSms: false,
+        },
     });
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -24,7 +36,7 @@ export function ModalEdit(props: IModal) {
             [name]: value,
         });
     };
-
+    
     const getUserId = (userData: string) => {
         const userObject = JSON.parse(userData);
         return userObject.id;
@@ -36,9 +48,11 @@ export function ModalEdit(props: IModal) {
         event.preventDefault();
         event.stopPropagation();
         console.log(formData)
+        
 
         try {
-            const response = await axios.put(`http://localhost:1220/user/update/${props.formData.id}`, formData);
+            const response = await axios.put(`http://localhost:7890/user/update/${userObject.id}`, formData);
+            const resposta = await axios.put(`http://localhost:7890/user/updateConditions/${userObject.id}`, termoData);
         } catch (error) {
             console.error('Erro ao enviar dados:', error);
         } finally {
@@ -48,6 +62,20 @@ export function ModalEdit(props: IModal) {
     };
 
     useEffect (() => {
+        if (props.formData && props.formData.resposta && Array.isArray(props.formData.resposta) && props.formData.resposta.length > 0) {
+            const lastResponse = props.formData.resposta[props.formData.resposta.length - 1];
+            if (lastResponse) {
+                setTermoData({
+                    termos: {
+                        armazenamentoDados: lastResponse.armazenamentoDados || false,
+                        pagamentoDados: lastResponse.pagamentoDados || false,
+                        propagandas: lastResponse.propagandas || false,
+                        envioEmail: lastResponse.envioEmail || false,
+                        envioSms: lastResponse.envioSms || false,
+                    },
+                });
+            }
+        }
         setFormData({
             //email: props.formData.email,
             nome: props.formData.nome,
@@ -55,7 +83,7 @@ export function ModalEdit(props: IModal) {
             telefone: props.formData.telefone,
             senha: props.formData.senha,
         })
-    }, [])
+    }, [props.formData])
 
     return (
         <>
@@ -117,7 +145,75 @@ export function ModalEdit(props: IModal) {
                             name={"email"}
                             value={formData.email}
                         /> */}
-
+                        <Form.Check
+                            type="switch"
+                            id="aceitarDados"
+                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento"
+                            checked={termoData.termos.armazenamentoDados}
+                            onChange={() => {
+                                const updatedFormData = {
+                                    ...termoData,
+                                    termos: {
+                                        ...termoData.termos,
+                                        armazenamentoDados: !termoData.termos.armazenamentoDados,
+                                        pagamentoDados: !termoData.termos.pagamentoDados,
+                                    }
+                                };
+                                setTermoData(updatedFormData);
+                            }}
+                            className="custom-switch"
+                        />
+                        <Form.Check
+                            type="switch"
+                            id="aceitarSMS"
+                            label="Aceitar receber SMS"
+                            checked={termoData.termos.envioSms}
+                            onChange={() => {
+                                const updatedFormData = {
+                                    ...termoData,
+                                    termos: {
+                                        ...termoData.termos,
+                                        envioSms: !termoData.termos.envioSms,
+                                    }
+                                };
+                                setTermoData(updatedFormData);
+                            }}
+                            className="custom-switch"
+                        />
+                        <Form.Check
+                            type="switch"
+                            id="aceitarEmail"
+                            label="Aceitar receber emails"
+                            checked={termoData.termos.envioEmail}
+                            onChange={() => {
+                                const updatedFormData = {
+                                    ...termoData,
+                                    termos: {
+                                        ...termoData.termos,
+                                        envioEmail: !termoData.termos.envioEmail,
+                                    }
+                                };
+                                setTermoData(updatedFormData);
+                            }}
+                            className="custom-switch"
+                        />
+                        <Form.Check
+                            type="switch"
+                            id="aceitarPropaganda"
+                            label="Aceitar receber propaganda"
+                            checked={termoData.termos.propagandas}
+                            onChange={() => {
+                                const updatedFormData = {
+                                    ...termoData,
+                                    termos: {
+                                        ...termoData.termos,
+                                        propagandas: !termoData.termos.propagandas,
+                                    }
+                                };
+                                setTermoData(updatedFormData);
+                            }}
+                            className="custom-switch"
+                        />
                         <Botao 
                             label="Salvar" 
                             id="signup-btn" 
