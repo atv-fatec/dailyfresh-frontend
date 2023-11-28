@@ -42,7 +42,7 @@ export function Cadastro() {
         }
 
         try {
-            const response = await axios.post('http://localhost:7890/user/create', formData);
+            const response = await axios.post('http://localhost:5000/user/create', formData);
             console.log("CADASTRO REALIZADO COM SUCESSO", formData)
             navigate("/");
             

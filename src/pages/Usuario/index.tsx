@@ -16,12 +16,12 @@ console.log("Dados do usuário: ",userObject)
 
 const handleDelete = async () => {
     try {
-        const response = await axios.delete(`http://localhost:7890/user/delete/${userObject.id}`);
+        const response = await axios.delete(`http://localhost:5000/user/delete/${userObject.id}`);
     } catch (error) {
         console.error('Erro ao deletar usuário:', error);
     }
 };
-
+    console.log(userObject)
     return(
         <>
             <NavBar/>

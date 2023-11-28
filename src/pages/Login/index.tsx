@@ -36,7 +36,7 @@ export function Login() {
     
     const handleLogin = async (email: string, senha: string) => {
         try {
-            const response = await axios.post("http://localhost:7890/user/login", {
+            const response = await axios.post("http://localhost:5000/user/login", {
                 email,
                 senha
             });

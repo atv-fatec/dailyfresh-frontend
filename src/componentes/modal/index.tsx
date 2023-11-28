@@ -49,13 +49,19 @@ export function ModalEdit(props: IModal) {
         event.stopPropagation();
         console.log(formData)
         
-
+        if (!termoData.termos.armazenamentoDados) {
+            alert("Você precisa aceitar o armazenamento de dados para prosseguir.");
+            return; // Evitar a submissão do formulário se o check não estiver marcado
+        }
+        
         try {
-            const response = await axios.put(`http://localhost:7890/user/update/${userObject.id}`, formData);
-            const resposta = await axios.put(`http://localhost:7890/user/updateConditions/${userObject.id}`, termoData);
+            const response = await axios.put(`http://localhost:5000/user/update/${userObject.id}`, formData);
+            const resposta = await axios.put(`http://localhost:5000/user/updateConditions/${userObject.id}`, termoData);
         } catch (error) {
             console.error('Erro ao enviar dados:', error);
         } finally {
+            let userData: any = formData
+            userData.resposta = [termoData.termos]
             localStorage.setItem("usuario", JSON.stringify(formData));
             props.OnHide();
         }
