@@ -43,11 +43,15 @@ export function Cadastro() {
 
         try {
             const response = await axios.post('http://localhost:5000/user/create', formData);
-            console.log("CADASTRO REALIZADO COM SUCESSO", formData)
             navigate("/");
             
-        } catch (error) {
+        } catch (error:any) {
             console.error('Erro ao enviar dados:', error);
+            if (error.response && error.response.data && error.response.data.data) {
+                alert('Erro: ' + error.response.data.data);
+              } else {
+                alert('Erro ao enviar dados. Por favor, tente novamente mais tarde.');
+              }
         }
     };
 
@@ -156,7 +160,6 @@ export function Cadastro() {
                                     type="checkbox"
                                     id="cadastro-checkbox"
                                     label="Você aceita o Termo de Uso de Dados?"
-                                    required
                                     feedback="Você deve aceitar os termos para se cadastrar"
                                     feedbackType="invalid"
                                     checked={acceptedTerms}

@@ -115,7 +115,6 @@ export function Home() {
   }, []);
 
   const updateUserConditions = (userId: number, updatedData: any) => {
-    console.log("Condições do usuário:", updatedData);
     axios
       .put(`http://localhost:5000/user/updateConditions/${userId}`, {
         "armazenamentoDados": updatedData.armazenamentoDados,

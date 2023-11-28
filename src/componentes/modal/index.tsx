@@ -47,7 +47,6 @@ export function ModalEdit(props: IModal) {
         const form = event.currentTarget;
         event.preventDefault();
         event.stopPropagation();
-        console.log(formData)
         
         if (!termoData.termos.armazenamentoDados) {
             alert("Você precisa aceitar o armazenamento de dados para prosseguir.");

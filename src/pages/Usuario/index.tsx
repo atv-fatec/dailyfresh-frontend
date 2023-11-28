@@ -11,17 +11,24 @@ export function Usuario() {
     const userData: string | null = localStorage.getItem("usuario");
     const userObject = JSON.parse(userData || "{}") as UserData ;
     const navigate = useNavigate();
-    console.log(userObject.resposta?.length)
-console.log("Dados do usuário: ",userObject)
 
-const handleDelete = async () => {
-    try {
-        const response = await axios.delete(`http://localhost:5000/user/delete/${userObject.id}`);
-    } catch (error) {
-        console.error('Erro ao deletar usuário:', error);
-    }
-};
-    console.log(userObject)
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete(`http://localhost:5000/user/delete/${userObject.id}`);
+            
+        } catch (error) {
+            console.error('Erro ao deletar usuário:', error);
+        }
+    };
+
+    const data = new Date(userObject.dataNascimento);
+    const adicionarZero = (numero:number) => (numero < 10 ? `0${numero}` : numero);
+    const dia = adicionarZero(data.getDate());
+    const mes = adicionarZero(data.getMonth() + 1);
+    const ano = data.getFullYear();
+    const dataFormatada = `${dia}/${mes}/${ano}`;
+
+console.log(userObject)
     return(
         <>
             <NavBar/>
@@ -31,7 +38,7 @@ const handleDelete = async () => {
                 <h4 className="user-titles">CPF</h4>
                 <p className="user-info">{userObject.cpf}</p>
                 <h4 className="user-titles">Data de Nascimento</h4>
-                <p className="user-info">{userObject.dataNascimento}</p>
+                <p className="user-info">{dataFormatada}</p>
                 <h4 className="user-titles">Telefone</h4>
                 <p className="user-info">{userObject.telefone}</p>
                 <h4 className="user-titles">Email</h4>

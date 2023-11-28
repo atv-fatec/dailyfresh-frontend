@@ -25,7 +25,6 @@ export function Login() {
                 
                 const userData = JSON.stringify(response.data);
                 localStorage.setItem("usuario", userData);
-                console.log(response.data)
                 navigate("/home");
             } catch (error) {
                 console.error(error);
@@ -42,10 +41,13 @@ export function Login() {
             });
     
             return response;
-        } catch (error) {
-            console.log("ERRO!!!")
+        } catch (error:any) {
+            if (error.response && error.response.data && error.response.data.data) {
+                alert('Erro: ' + error.response.data.data);
+              } else {
+                alert('Erro ao realizar login. Por favor, verificar se email e senha estão corretos.');
+              }
             throw error;
-            
         }
     }
 
