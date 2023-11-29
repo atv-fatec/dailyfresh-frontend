@@ -2,9 +2,11 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { useState } from "react";
 import { IModalTermos } from "../../interface/modalTermos";
 import "./modal.css";
+import { useNavigate } from "react-router-dom";
 
 export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
     const { formData, setFormData } = props;
+    const navigate = useNavigate();
 
     const handleAceitar = () => {
         const updatedFormData = {
@@ -37,6 +39,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
 
         setFormData(updatedFormData);
         props.OnHide();
+        navigate("/");
     };
 
     return (
@@ -59,7 +62,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                         <Form.Check
                             type="switch"
                             id="aceitarDados"
-                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento"
+                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento (obrigatório)"
                             checked={formData.termos.armazenamentoDados}
                             onChange={() => {
                                 const updatedFormData = {

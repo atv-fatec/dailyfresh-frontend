@@ -6,6 +6,7 @@ import { ModalTermos } from "../../componentes/modalTermos/modalTermos";
 import { useEffect, useState } from "react";
 import { card, card2, card3, card4 } from "../../assets";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const pratos = [
   {
@@ -84,6 +85,7 @@ const pratos = [
 
 export function Home() {
   const [showModal, setShowModal] = useState(false);
+  const [allTermsAccepted, setAllTermsAccepted] = useState(false);
   const [formData, setFormData] = useState({
     nome: '',
     cpf: '',
@@ -101,29 +103,26 @@ export function Home() {
     },
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const userData: string | null = localStorage.getItem("usuario");
     if (userData !== null) {
       const userObject = JSON.parse(userData);
+      console.log(userObject);
       if (userObject.resposta && Array.isArray(userObject.resposta) && userObject.resposta.length > 0) {
         const termsResponse = userObject.resposta[userObject.resposta.length - 1];
-        if (!termsResponse.armazenamentoDados || !termsResponse.pagamentoDados || !termsResponse.propagandas || !termsResponse.envioEmail || !termsResponse.envioSms) {
+        if (!termsResponse.armazenamentoDados || !termsResponse.pagamentoDados) {
           setShowModal(true);
         }
       }
     }
   }, []);
 
-  const updateUserConditions = (userId: number, updatedData: any) => {
+  const updateUserConditions = (userId: any, updatedData: { armazenamentoDados: boolean; pagamentoDados: boolean; propagandas: boolean; envioEmail: boolean; envioSms: boolean; }) => {
     console.log("Condições do usuário:", updatedData);
     axios
-      .put(`http://localhost:1220/user/updateConditions/${userId}`, {
-        "armazenamentoDados": updatedData.armazenamentoDados,
-        "pagamentoDados": updatedData.pagamentoDados,
-        "propagandas": updatedData.propagandas,
-        "envioEmail": updatedData.envioEmail,
-        "envioSms": updatedData.envioSms,
-  })
+      .put(`http://localhost:7890/user/updateConditions/${userId}`, updatedData)
       .then((response) => {
         console.log("Condições do usuário atualizadas:", response.data);
       })
@@ -132,22 +131,35 @@ export function Home() {
       });
   };
 
-
   const handleAcceptTerms = () => {
-    setShowModal(false);
-    const userData: string | null = localStorage.getItem("usuario");
-    if (userData !== null) {
-      const userId = getUserId(userData);
-      if (userId !== null) {
+    const { armazenamentoDados, pagamentoDados } = formData.termos;
+    const atLeastOneRequiredAccepted = armazenamentoDados || pagamentoDados;
+    const allAccepted = armazenamentoDados && pagamentoDados;
+    
+
+    if (atLeastOneRequiredAccepted) {
+      setShowModal(false);
+      setAllTermsAccepted(allAccepted);
+
+      const userData = localStorage.getItem("usuario");
+      if (userData !== null) {
+        const userObject = JSON.parse(userData);
+        const userId = userObject.id;
+
         updateUserConditions(userId, formData.termos);
       }
+    } else {
+      navigate('/');
     }
   };
+  
 
-  const getUserId = (userData: string) => {
-    const userObject = JSON.parse(userData);
-    return userObject.id;
-
+  const getUserId = (userData: string | null) => {
+    if (userData !== null) {
+      const userObject = JSON.parse(userData);
+      return userObject.id;
+    }
+    return null;
   };
 
 
@@ -169,18 +181,22 @@ export function Home() {
         </Container>
       </div>
       <Container className="home-container">
-        {showModal && (
-          <ModalTermos
-            Show={showModal}
-            OnHide={() => setShowModal(false)}
-            formData={formData}
-            setFormData={setFormData}
-            OnAccept={handleAcceptTerms}
-            OnReject={() => {
+      {showModal && (
+        <ModalTermos
+          Show={showModal}
+          OnHide={() => {
+            if (allTermsAccepted) {
               setShowModal(false);
-            }}
-          />
-        )}
+            }
+          }}
+          formData={formData}
+          setFormData={setFormData}
+          OnAccept={handleAcceptTerms}
+          OnReject={() => {
+            setShowModal(false);
+          }}
+        />
+      )}
         <Row>
           {pratos.map(({ nome, preco, imagem }, index) => {
             return (

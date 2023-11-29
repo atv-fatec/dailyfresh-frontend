@@ -35,10 +35,8 @@ export function ModalEdit(props: IModal) {
         const form = event.currentTarget;
         event.preventDefault();
         event.stopPropagation();
-        console.log(formData)
-
         try {
-            const response = await axios.put(`http://localhost:1220/user/update/${props.formData.id}`, formData);
+            const response = await axios.put(`http://localhost:7890/user/update/${props.formData.id}`, formData);
         } catch (error) {
             console.error('Erro ao enviar dados:', error);
         } finally {
