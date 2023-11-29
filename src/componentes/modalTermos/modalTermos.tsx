@@ -14,9 +14,6 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
             termos: {
                 armazenamentoDados: true,
                 pagamentoDados: true,
-                propagandas: true,
-                envioEmail: true,
-                envioSms: true,
             }
         };
 
@@ -132,7 +129,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={handleRecusar} className="btn-recusar">Recusar todas</Button>
-                    <Button onClick={handleAceitar} className="btn-aceitar">Aceitar todos</Button>
+                    <Button onClick={handleAceitar}  className="btn-aceitar">Aceitar</Button>
                 </Modal.Footer>
             </Modal>
         </>
