@@ -132,7 +132,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={handleRecusar} className="btn-recusar">Recusar todas</Button>
-                    <Button onClick={handleAceitar} className="btn-aceitar">Aceitar</Button>
+                    <Button onClick={handleAceitar} className="btn-aceitar">Aceitar todos</Button>
                 </Modal.Footer>
             </Modal>
         </>

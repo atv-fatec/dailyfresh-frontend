@@ -25,7 +25,6 @@ export function Login() {
                 
                 const userData = JSON.stringify(response.data);
                 localStorage.setItem("usuario", userData);
-    
                 navigate("/home");
             } catch (error) {
                 console.error(error);
@@ -36,13 +35,18 @@ export function Login() {
     
     const handleLogin = async (email: string, senha: string) => {
         try {
-            const response = await axios.post("http://localhost:7890/user/login", {
+            const response = await axios.post("http://localhost:5000/user/login", {
                 email,
                 senha
             });
     
             return response;
-        } catch (error) {
+        } catch (error:any) {
+            if (error.response && error.response.data && error.response.data.data) {
+                alert('Erro: ' + error.response.data.data);
+              } else {
+                alert('Erro ao realizar login. Por favor, verificar se email e senha estão corretos.');
+              }
             throw error;
         }
     }
