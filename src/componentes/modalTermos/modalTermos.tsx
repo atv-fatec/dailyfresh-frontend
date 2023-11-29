@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
     const { formData, setFormData } = props;
+    const [validated, setValidated] = useState(false);
     const navigate = useNavigate();
 
     const handleAceitar = () => {
@@ -14,6 +15,9 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
             termos: {
                 armazenamentoDados: true,
                 pagamentoDados: true,
+                propagandas: true,
+                envioEmail: true,
+                envioSms: true,
             }
         };
 
@@ -55,11 +59,11 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 </Modal.Header>
                 <Modal.Body>
                     <p>Lorem Ipsum...</p>
-                    <Form>
+                    <Form noValidate validated={validated}>
                         <Form.Check
                             type="switch"
                             id="aceitarDados"
-                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento (obrigatório)"
+                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento (obrigatórios)"
                             checked={formData.termos.armazenamentoDados}
                             onChange={() => {
                                 const updatedFormData = {
@@ -129,7 +133,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={handleRecusar} className="btn-recusar">Recusar todas</Button>
-                    <Button onClick={handleAceitar}  className="btn-aceitar">Aceitar</Button>
+                    <Button onClick={handleAceitar} className="btn-aceitar">Aceitar</Button>
                 </Modal.Footer>
             </Modal>
         </>
