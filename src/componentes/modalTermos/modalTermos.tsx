@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { IModalTermos } from "../../interface/modalTermos";
 import "./modal.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
     const { formData, setFormData } = props;
@@ -47,6 +48,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
 
         fetchData();
     }, []);
+    const navigate = useNavigate();
 
     const handleAceitar = () => {
         const updatedFormData = {
@@ -54,9 +56,6 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
             termos: {
                 armazenamentoDados: true,
                 pagamentoDados: true,
-                propagandas: true,
-                envioEmail: true,
-                envioSms: true,
             }
         };
 
@@ -79,6 +78,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
 
         setFormData(updatedFormData);
         props.OnHide();
+        navigate("/");
     };
 
     return (
@@ -101,7 +101,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                         <Form.Check
                             type="switch"
                             id="aceitarDados"
-                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento"
+                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento (obrigatórios)"
                             checked={formData.termos.armazenamentoDados}
                             onChange={() => {
                                 const updatedFormData = {
@@ -171,7 +171,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={handleRecusar} className="btn-recusar">Recusar todas</Button>
-                    <Button onClick={handleAceitar} className="btn-aceitar">Aceitar todos</Button>
+                    <Button onClick={handleAceitar} className="btn-aceitar">Aceitar</Button>
                 </Modal.Footer>
             </Modal>
         </>
