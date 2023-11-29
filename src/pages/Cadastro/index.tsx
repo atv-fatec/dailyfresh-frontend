@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { branco } from "../../assets";
 import { Input, Botao } from "../../componentes";
-import { ModalTermos } from "../../componentes/modalTermos/modalTermos";
 import "./Cadastro.css";
 import axios from "axios";
 import { UserData } from "../../interface/dadosUsuario";
+import { ModalTermos } from "../../componentes/modalTermos/modalTermos";
 
 export function Cadastro() {
     const navigate = useNavigate();
