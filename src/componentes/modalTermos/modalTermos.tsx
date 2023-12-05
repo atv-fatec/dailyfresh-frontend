@@ -4,6 +4,7 @@ import { IModalTermos } from "../../interface/modalTermos";
 import "./modal.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserData } from "../../interface/dadosUsuario";
 
 export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
     const { formData, setFormData } = props;
@@ -12,6 +13,8 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
     const [mensagem, setMensagem] = useState<string>("");
     const [data, setData] = useState<string>("");
     const [versao, setVersao] = useState<string>("");
+    const userData: string | null = localStorage.getItem("usuario");
+    const userObject = JSON.parse(userData || "{}") as UserData ;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,12 +59,27 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
             termos: {
                 armazenamentoDados: true,
                 pagamentoDados: true,
+                propagandas: false,
+                envioEmail: false,
+                envioSms: false
             }
         };
 
         setFormData(updatedFormData);
         props.OnAccept();
         props.OnHide();
+    };
+
+    const handleDelete = async () => {
+        try {
+            if (userObject){
+                const response = await axios.delete(`http://localhost:5000/user/delete/${userObject.id}`);
+                console.log("Usuário deletado com sucesso")
+                alert("O usuário foi deletado por negar os Termos")
+            }     
+        } catch (error) {
+            console.error('Erro ao deletar usuário:', error);
+        }
     };
 
     const handleRecusar = () => {
@@ -75,7 +93,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 envioSms: false,
             }
         };
-
+        handleDelete();
         setFormData(updatedFormData);
         props.OnHide();
         navigate("/");
@@ -171,7 +189,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={handleRecusar} className="btn-recusar">Recusar todas</Button>
-                    <Button onClick={handleAceitar} className="btn-aceitar">Aceitar somente o necessário</Button>
+                    <Button onClick={handleAceitar} className="btn-aceitar">Selecionar somente o necessário</Button>
                 </Modal.Footer>
             </Modal>
         </>

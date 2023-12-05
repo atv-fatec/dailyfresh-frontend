@@ -119,6 +119,30 @@ export function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const userData: string | null = localStorage.getItem("usuario");
+            if (userData !== null){
+              const userObject = JSON.parse(userData);
+
+              const idResponse = await axios.get('http://localhost:5000/term/readLatest');
+              const id = idResponse.data.latestTermId;
+
+              const termResponse = await axios.get(`http://localhost:5000/term/read/${id}`);
+              const termo = termResponse.data;
+              if (new Date(userObject.resposta[userObject.resposta.length - 1].data) < new Date(termo.data.data)){
+                setShowModal(true);
+              }
+            }
+        } catch (error) {
+            console.error('Erro ao obter dados do termo mais recente:', error);
+        }
+    };
+
+    fetchData();
+}, []);
+
   const updateUserConditions = (userId: any, updatedData: { armazenamentoDados: boolean; pagamentoDados: boolean; propagandas: boolean; envioEmail: boolean; envioSms: boolean; }) => {
     console.log("Condições do usuário:", updatedData);
     axios
@@ -130,22 +154,27 @@ export function Home() {
         console.error("Erro ao atualizar condições:", error);
       });
   };
+  console.log(formData);
 
-  const handleAcceptTerms = () => {
-    const { armazenamentoDados, pagamentoDados } = formData.termos;
-    const atLeastOneRequiredAccepted = armazenamentoDados || pagamentoDados;
-    const allAccepted = armazenamentoDados && pagamentoDados;
+  const handleAcceptTerms = async () => {
     
-
-    if (atLeastOneRequiredAccepted) {
+    const { armazenamentoDados, pagamentoDados } = formData.termos;
+    const atLeastOneRequiredAccepted = armazenamentoDados && pagamentoDados;
+    console.log(formData)
+    const allAccepted = armazenamentoDados && pagamentoDados;
+    formData.termos.armazenamentoDados = true
+    formData.termos.pagamentoDados = true
+    
+    if (formData.termos.armazenamentoDados === true && formData.termos.pagamentoDados === true) {
+      console.log("aquicarai")
       setShowModal(false);
       setAllTermsAccepted(allAccepted);
-
+  
       const userData = localStorage.getItem("usuario");
       if (userData !== null) {
         const userObject = JSON.parse(userData);
         const userId = userObject.id;
-
+  
         updateUserConditions(userId, formData.termos);
       }
     } else {
@@ -191,7 +220,17 @@ export function Home() {
           }}
           formData={formData}
           setFormData={setFormData}
-          OnAccept={handleAcceptTerms}
+          OnAccept={()=>[setFormData((FormData) => ({
+            ...FormData,
+            termos: {
+              ...FormData.termos,
+              armazenamentoDados: true,
+              pagamentoDados: true,
+              propagandas: formData.termos.propagandas !== undefined ? formData.termos.propagandas : false,
+              envioEmail: formData.termos.envioEmail !== undefined ? formData.termos.envioEmail : false,
+              envioSms: formData.termos.envioSms !== undefined ? formData.termos.envioSms : false,
+            },
+          })), handleAcceptTerms()]}
           OnReject={() => {
             setShowModal(false);
           }}

@@ -15,10 +15,11 @@ export function ModalEdit(props: IModal) {
     const userObject = JSON.parse(userData || "{}") as UserData ;
     const [formData, setFormData] = useState({
         nome: '',
-        //email: '',
+        email: '',
         dataNascimento: '',
         telefone: '',
-        senha: ''
+        senha: '',
+        cpf: '',
     });
     const [termoData, setTermoData] = useState({
         termos: {
@@ -31,10 +32,27 @@ export function ModalEdit(props: IModal) {
     });
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+    
+        let formattedValue = value;
+    
+        // Verifica se o campo é 'dataNascimento'
+        if (name === 'dataNascimento') {
+            formattedValue = formatMyDate(value);
+        }
+    
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: formattedValue,
+        }));
+    };
+    
+    // Função para formatar a data, ajuste conforme necessário
+    const formatMyDate = (dateString: string) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
     
     const getUserId = (userData: string) => {
@@ -82,11 +100,12 @@ export function ModalEdit(props: IModal) {
             }
         }
         setFormData({
-            //email: props.formData.email,
+            email: props.formData.email,
             nome: props.formData.nome,
             dataNascimento: props.formData.dataNascimento,
             telefone: props.formData.telefone,
             senha: props.formData.senha,
+            cpf: props.formData.cpf,
         })
     }, [props.formData])
 

@@ -1,7 +1,7 @@
 import { Button, Container } from "react-bootstrap";
 import { Botao, ModalEdit, NavBar } from "../../componentes";
 import "./Usuario.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserData } from "../../interface/dadosUsuario";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +11,26 @@ export function Usuario() {
     const userData: string | null = localStorage.getItem("usuario");
     const userObject = JSON.parse(userData || "{}") as UserData ;
     const navigate = useNavigate();
+    const [refresh, setRefresh] = useState(false)
+    const [respostaUser, setRespostaUser] = useState<UserData>();
+    
+
+    useEffect(() => {
+        const userData: string | null = localStorage.getItem("usuario");
+        if (userData !== null) {
+            const userObject = JSON.parse(userData);
+            axios.get(`http://localhost:5000/user/read/${userObject.id}`)
+          .then((response) => {
+            console.log("Id do usuario", userObject.id)
+            console.log('Dados do usuário:', response.data);
+            setRespostaUser(response.data.data);
+          })
+          .catch((error) => {
+            // Lida com erros, se necessário
+            console.error('Erro ao obter dados do usuário:', error);
+          });
+        }
+      }, []);
 
     const handleDelete = async () => {
         try {
@@ -44,30 +64,46 @@ console.log(userObject)
                 <h4 className="user-titles">Email</h4>
                 <p className="user-info">{userObject.email}</p>
                 <hr/>
-                {userObject.resposta.length > 0 && userObject.resposta[userObject.resposta?.length - 1].armazenamentoDados? <>
-                <h4 className="user-titles">Armazenamento de dados</h4>
-                <p className="user-info">{userObject.resposta[userObject.resposta?.length - 1].armazenamentoDados? "Aceito" : "Negado"}</p>
-                </>
-                : <> </> }
-                 {userObject.resposta.length > 0 && userObject.resposta[userObject.resposta?.length - 1].pagamentoDados? <>
-                <h4 className="user-titles">Dados de pagamentos</h4>
-                <p className="user-info">{userObject.resposta[userObject.resposta?.length - 1].pagamentoDados? "Aceito" : "Negado"}</p>
-                
-                </> : <> </> }
-                {userObject.resposta.length > 0 && userObject.resposta[userObject.resposta?.length - 1].pagamentoDados? <>
-                <h4 className="user-titles">Aceito receber propagandas</h4>
-                <p className="user-info">{userObject.resposta[userObject.resposta?.length - 1].propagandas? "Aceito" : "Negado"}</p>
-                </> : <> </> }
-
-                {userObject.resposta.length > 0 && userObject.resposta[userObject.resposta?.length - 1].pagamentoDados? <>
-                <h4 className="user-titles">Aceito receber email</h4>
-                <p className="user-info">{userObject.resposta[userObject.resposta?.length - 1].envioEmail? "Aceito" : "Negado"}</p>
-                </> : <> </> }
-
-                {userObject.resposta.length > 0 && userObject.resposta[userObject.resposta?.length - 1].pagamentoDados? <>
-                <h4 className="user-titles">Aceito receber SMS</h4>
-                <p className="user-info">{userObject.resposta[userObject.resposta?.length - 1].envioSms? "Aceito" : "Negado"}</p>
-                </> : <> </> }
+                {respostaUser && respostaUser.resposta?.length > 0 && (
+                    <>
+                        <h4 className="user-titles">Armazenamento de dados</h4>
+                        <p className="user-info">
+                            {respostaUser.resposta[respostaUser.resposta?.length - 1].armazenamentoDados ? "Aceito" : "Negado"}
+                        </p>
+                    </>
+                )}
+                {respostaUser && respostaUser.resposta?.length > 0 && (
+                    <>
+                        <h4 className="user-titles">Armazenamento de dados</h4>
+                        <p className="user-info">
+                            {respostaUser.resposta[respostaUser.resposta?.length - 1].pagamentoDados ? "Aceito" : "Negado"}
+                        </p>
+                    </>
+                )}
+                {respostaUser && respostaUser.resposta?.length > 0 && (
+                    <>
+                        <h4 className="user-titles">Aceito receber propagandas</h4>
+                        <p className="user-info">
+                            {respostaUser.resposta[respostaUser.resposta?.length - 1].propagandas ? "Aceito" : "Negado"}
+                        </p>
+                    </>
+                )}
+                {respostaUser && respostaUser.resposta?.length > 0 && (
+                    <>
+                        <h4 className="user-titles">Aceito receber email</h4>
+                        <p className="user-info">
+                            {respostaUser.resposta[respostaUser.resposta?.length - 1].envioEmail ? "Aceito" : "Negado"}
+                        </p>
+                    </>
+                )}
+                {respostaUser && respostaUser.resposta?.length > 0 && (
+                    <>
+                        <h4 className="user-titles">Aceito receber SMS</h4>
+                        <p className="user-info">
+                            {respostaUser.resposta[respostaUser.resposta?.length - 1].envioSms ? "Aceito" : "Negado"}
+                        </p>
+                    </>
+                )}
                 <hr/>
                 <Botao label={"Editar"} id={"edit-btn"} OnClick={() => setModalShow(true)}/>
                 <Botao label={"Log Out"} id={"logout-btn"} OnClick={() => {
