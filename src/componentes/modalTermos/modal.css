@@ -1,6 +1,7 @@
 .modal-title{
     color: #297373 !important;
     font-family: 'Playfair Display', serif;
+    font-weight: 700 !important;
 }
 
 .custom-switch .form-check-input:checked {
@@ -9,11 +10,24 @@
 }
 
 .btn-aceitar {
-    background-color: #297373 !important;
-    border-color: #297373 !important;
-}
-
-.btn-recusar {
     background-color: #FFBB6C !important;
     border-color: #FFBB6C !important;
+}
+
+.termo{
+    font-family: 'Questrial', sans-serif !important;
+}
+
+.termos-modal{
+    color: #FF8552 !important;
+    text-align: center;
+}
+
+.cadastro-subtitle{
+    font-family: 'Questrial', sans-serif !important;
+    color: #297373;
+}
+
+.cadastro-check{
+    font-family: 'Questrial', sans-serif !important;
 }

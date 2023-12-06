@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { ModalTermos } from "../../componentes/modalTermos/modalTermos";
 
 export function Login() {
     const navigate = useNavigate();
     const [validated, setValidated] = useState(false);
     const [loginError, setLoginError] = useState("");
+    const [modalShow, setModalShow] = useState(false);
 
     const handleSubmit = async (event: any) => {
         const form = event.currentTarget;
@@ -44,17 +46,30 @@ export function Login() {
     
             return response;
         } catch (error:any) {
-            if (error.response && error.response.data && error.response.data.data) {
-                alert('Erro: ' + error.response.data.data);
-              } else {
-                alert('Erro ao realizar login. Por favor, verificar se email e senha estão corretos.');
-              }
+            alert(error.response.data.error)
+            if(error.response.status === 401 && error.response.data.error==="Por favor, concorde com o último termo."){
+                alert(error.response.data.error)
+                setModalShow(true)
+                console.log("AQUI")
+            } else{
+                alert(error.response.data.error)
+            }
             throw error;
         }
     }
 
     return(
         <>
+            <ModalTermos 
+                Show={modalShow} 
+                OnHide={function (): void {
+                    throw new Error("Function not implemented.");
+                } } OnAccept={function (): void {
+                    throw new Error("Function not implemented.");
+                } } OnReject={function (): void {
+                    throw new Error("Function not implemented.");
+                } } formData={undefined} setFormData={undefined}
+            />
             <Row className="login-row">
                 <Col>
                     <div className="login-image"></div>

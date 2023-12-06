@@ -8,96 +8,100 @@ import { UserData } from "../../interface/dadosUsuario";
 import Cookies from "js-cookie";
 
 export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
-    const { formData, setFormData } = props;
+    const [formData, setFormData] = useState({
+        obrigatorios: [] as any[], 
+        condicoes: [] as any[],     
+        meios: [] as any[], 
+    });
     const [validated, setValidated] = useState(false);
-    const [latestTermId, setLatestTermId] = useState<number | null>(null);
-    const [mensagem, setMensagem] = useState<string>("");
-    const [data, setData] = useState<string>("");
-    const [versao, setVersao] = useState<string>("");
     const userData = Cookies.get("usuario");
     const userObject = JSON.parse(userData || "{}") as UserData ;
+    const [termosData, setTermosData] = useState({versao: '', mensagem: '', data: ''});
+    const [obrigatoriosTermo, setObrigatoriosTermo] = useState<string[]>([]);
+    const [condicoesTermo, setCondicoesTermo] = useState<string[]>([]);
+    const [meiosTermo, setMeiosTermo] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Obter o ID mais recente
                 const idResponse = await axios.get('http://localhost:5000/term/readLatest');
                 const id = idResponse.data.latestTermId;
-                console.log("ID do termo mais recente:", id);
+                console.log(id)
 
-                // Verificar se há um ID válido
-                if (id !== null && id !== undefined) {
-                    // Usar o ID para obter os dados do termo mais recente
-                    const termResponse = await axios.get(`http://localhost:5000/term/read/${id}`);
-                    const termo = termResponse.data;
+                const termResponse = await axios.get(`http://localhost:5000/term/read/${id}`);
+                const termo = termResponse.data;
+                setTermosData(termo.data);
+                console.log("ESSE AQUI!",termo.data)
+                setObrigatoriosTermo(termo.data.obrigatorios.split(','));
+                setCondicoesTermo(termo.data.condicoes.split(','));
+                setMeiosTermo(termo.data.meios.split(','));
+                setFormData({...formData, obrigatorios: termo.data.obrigatorios.split(',').map((term: any)=> false), condicoes: termo.data.condicoes.split(',').map((term: any)=> false), meios: termo.data.meios.split(',').map((term: any)=> false)})  
 
-                    // Atualizar os estados com os dados do termo mais recente
-                    const data = new Date(termo.data.data);
-                    const adicionarZero = (numero:number) => (numero < 10 ? `0${numero}` : numero);
-                    const dia = adicionarZero(data.getDate());
-                    const mes = adicionarZero(data.getMonth() + 1);
-                    const ano = data.getFullYear();
-                    const dataFormatada = `${dia}/${mes}/${ano}`;
-
-                    setLatestTermId(id);
-                    setMensagem(termo.data.mensagem);
-                    setData(dataFormatada);
-                    setVersao(termo.data.versao);
-                } else {
-                    console.error('ID do termo mais recente inválido.');
-                }
             } catch (error) {
                 console.error('Erro ao obter dados do termo mais recente:', error);
             }
         };
-
+    
         fetchData();
+        
     }, []);
     const navigate = useNavigate();
+
+    const handleCheckboxChangeObrigatorios = (event: any) => {
+        let { name } = event.target;
+        let  index  = name.split('-')[1]
+        index = parseInt(index)
+        const value = event.target.checked 
+        
+        setFormData({
+            ...formData,
+            obrigatorios: formData.obrigatorios.map((item: any, i: any) => {
+                if (i == index) {
+                    return value; 
+                }
+                return item; 
+            }),
+        });
+
+
+    }
+
+    const handleCheckboxChangeCondicoes = (event: any) => {
+        let { name } = event.target;
+        let  index  = name.split('-')[1]
+        index = parseInt(index)
+        const value = event.target.checked 
+        
+        setFormData({
+            ...formData,
+            condicoes: formData.condicoes.map((item: any, i: any) => {
+                if (i == index) {
+                    return value; 
+                }
+                return item; 
+            }),
+        });
+    }
+
+    const handleCheckboxChangeMeios = (event: any) => {
+        let { name } = event.target;
+        let  index  = name.split('-')[1]
+        index = parseInt(index)
+        const value = event.target.checked 
+        
+        setFormData({
+            ...formData,
+            meios: formData.meios.map((item: any, i: any) => {
+                if (i == index) {
+                    return value; 
+                }
+                return item; 
+            }),
+        });
+    }
+
     const handleAceitar = () => {
-        const updatedFormData = {
-            ...formData,
-            termos: {
-                armazenamentoDados: true,
-                pagamentoDados: true,
-                propagandas: false,
-                envioEmail: false,
-                envioSms: false
-            }
-        };
-
-        setFormData(updatedFormData);
-        props.OnAccept();
-        props.OnHide();
-    };
-
-    const handleDelete = async () => {
-        try {
-            if (userObject){
-                const response = await axios.delete(`http://localhost:5000/user/delete/${userObject.id}`);
-                console.log("Usuário deletado com sucesso")
-                alert("O usuário foi deletado por negar os Termos")
-            }     
-        } catch (error) {
-            console.error('Erro ao deletar usuário:', error);
-        }
-    };
-
-    const handleRecusar = () => {
-/*         const updatedFormData = {
-            ...formData,
-            termos: {
-                armazenamentoDados: false,
-                pagamentoDados: false,
-                propagandas: false,
-                envioEmail: false,
-                envioSms: false,
-            }
-        };
-        handleDelete();
-        setFormData(updatedFormData); */
-        props.OnHide();
-        navigate("/");
+        
     };
 
     return (
@@ -109,89 +113,61 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 show={props.Show}
                 onHide={props.OnHide}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter" className="modal-title">
-                        Termos e Condições - Versão {versao} ({data})
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>{mensagem}</p>
-                    <Form noValidate validated={validated}>
-                        <Form.Check
-                            type="switch"
-                            id="aceitarDados"
-                            label="Aceitar armazenamento de dados e armazenamento de dados de pagamento (obrigatórios)"
-                            /* checked={formData.termos.armazenamentoDados} */
-/*                             onChange={() => {
-                                const updatedFormData = {
-                                    ...formData,
-                                    termos: {
-                                        ...formData.termos,
-                                        armazenamentoDados: !formData.termos.armazenamentoDados,
-                                        pagamentoDados: !formData.termos.pagamentoDados,
-                                    }
-                                };
-                                setFormData(updatedFormData);
-                            }} */
-                            className="custom-switch"
-                        />
-                        <Form.Check
-                            type="switch"
-                            id="aceitarSMS"
-                            label="Aceitar receber SMS"
-                            /* checked={formData.termos.envioSms} */
-/*                             onChange={() => {
-                                const updatedFormData = {
-                                    ...formData,
-                                    termos: {
-                                        ...formData.termos,
-                                        envioSms: !formData.termos.envioSms,
-                                    }
-                                };
-                                setFormData(updatedFormData);
-                            }} */
-                            className="custom-switch"
-                        />
-                        <Form.Check
-                            type="switch"
-                            id="aceitarEmail"
-                            label="Aceitar receber emails"
-                            /* checked={formData.termos.envioEmail} */
-/*                             onChange={() => {
-                                const updatedFormData = {
-                                    ...formData,
-                                    termos: {
-                                        ...formData.termos,
-                                        envioEmail: !formData.termos.envioEmail,
-                                    }
-                                };
-                                setFormData(updatedFormData);
-                            }} */
-                            className="custom-switch"
-                        />
-                        <Form.Check
-                            type="switch"
-                            id="aceitarPropaganda"
-                            label="Aceitar receber propaganda"
-                            /* checked={formData.termos.propagandas} */
-/*                             onChange={() => {
-                                const updatedFormData = {
-                                    ...formData,
-                                    termos: {
-                                        ...formData.termos,
-                                        propagandas: !formData.termos.propagandas,
-                                    }
-                                };
-                                setFormData(updatedFormData);
-                            }} */
-                            className="custom-switch"
-                        />
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleRecusar} className="btn-recusar">Recusar todas</Button>
-                    <Button onClick={handleAceitar} className="btn-aceitar">Selecionar somente o necessário</Button>
-                </Modal.Footer>
+                {termosData &&(
+                    <>
+                        <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter" className="modal-title">
+                            Termos e Condições - {termosData.versao}  ({termosData.data})
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p className="termo">{termosData.mensagem}</p>
+                        <hr/>
+                        <Form noValidate validated={validated}>
+                        <h4 className="cadastro-subtitle">Ao se cadastrar, você concorda com os seguintes termos e condições:</h4>
+                            {obrigatoriosTermo.map((item, index) => (
+                                <Form.Check
+                                    onChange={(e) => handleCheckboxChangeObrigatorios(e)}
+                                    required
+                                    key={index}
+                                    label={`${item}`}
+                                    name={`obrigatorios-${index}`}
+                                    type="checkbox"
+                                    id={`seila-${index + 1}`}
+                                    className="cadastro-check"
+                                />
+                            ))}
+                            {condicoesTermo.map((item, index) => (
+                                <Form.Check
+                                    key={index}
+                                    onChange={(e) => handleCheckboxChangeCondicoes(e)}
+                                    label={item}
+                                    name={`condicoes-${index}`}
+                                    type="checkbox"
+                                    id={`seila-condicoes-${index + 1}`}
+                                    className="cadastro-check"
+                                />
+                            ))}
+                            <hr/>
+                            <h4 className="cadastro-subtitle">Ao se cadastrar, você concorda receber notícias e propagandar por:</h4>
+                            {meiosTermo.map((item, index) => (
+                                <Form.Check
+                                    key={index}
+                                    onChange={(e) => handleCheckboxChangeMeios(e)}
+                                    label={item}
+                                    name={`meios-${index}`}
+                                    type="checkbox"
+                                    id={`seila-meios-${index + 1}`}
+                                    className="cadastro-check"
+                                />
+                            ))}
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={handleAceitar} className="btn-aceitar" type="submit">Enviar</Button>
+                    </Modal.Footer>
+                    </>
+                )}
             </Modal>
         </>
     )
