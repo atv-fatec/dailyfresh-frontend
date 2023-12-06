@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { card, card2, card3, card4 } from "../../assets";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const pratos = [
   {
@@ -87,32 +88,23 @@ export function Home() {
   const [showModal, setShowModal] = useState(false);
   const [allTermsAccepted, setAllTermsAccepted] = useState(false);
   const [formData, setFormData] = useState({
-    nome: '',
-    cpf: '',
-    dataNascimento: '',
-    telefone: '',
-    email: '',
-    senha: '',
-    aceitaTermos: false,
-    termos: {
-      armazenamentoDados: false,
-      pagamentoDados: false,
-      propagandas: false,
-      envioEmail: false,
-      envioSms: false,
-    },
+    obrigatorios: [],
+    condicoes: [],
+    meios: [],
   });
 
   const navigate = useNavigate();
+  const userData: string | undefined = Cookies.get("usuario");
+  //console.log("cookieeeee", userData);
 
   useEffect(() => {
-    const userData: string | null = localStorage.getItem("usuario");
-    if (userData !== null) {
+    if (userData) {
       const userObject = JSON.parse(userData);
-      console.log(userObject);
       if (userObject.resposta && Array.isArray(userObject.resposta) && userObject.resposta.length > 0) {
-        const termsResponse = userObject.resposta[userObject.resposta.length - 1];
-        if (!termsResponse.armazenamentoDados || !termsResponse.pagamentoDados) {
+        const termsResponse = String(userObject.resposta[0].obrigatorios);
+        const arrayObrigatorios = termsResponse.split(',').map((obrigatorio) => obrigatorio === 'true');
+        const termoNaoAceito = arrayObrigatorios.findIndex((obrigatorio) => !obrigatorio);
+        if (termoNaoAceito !== -1) {
           setShowModal(true);
         }
       }
@@ -122,8 +114,7 @@ export function Home() {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const userData: string | null = localStorage.getItem("usuario");
-            if (userData !== null){
+            if (userData){
               const userObject = JSON.parse(userData);
 
               const idResponse = await axios.get('http://localhost:5000/term/readLatest');
@@ -131,6 +122,7 @@ export function Home() {
 
               const termResponse = await axios.get(`http://localhost:5000/term/read/${id}`);
               const termo = termResponse.data;
+              console.log("termo", termo);
               if (new Date(userObject.resposta[userObject.resposta.length - 1].data) < new Date(termo.data.data)){
                 setShowModal(true);
               }
@@ -144,7 +136,7 @@ export function Home() {
 }, []);
 
   const updateUserConditions = (userId: any, updatedData: { armazenamentoDados: boolean; pagamentoDados: boolean; propagandas: boolean; envioEmail: boolean; envioSms: boolean; }) => {
-    console.log("Condições do usuário:", updatedData);
+    //console.log("Condições do usuário:", updatedData);
     axios
       .put(`http://localhost:5000/user/updateConditions/${userId}`, updatedData)
       .then((response) => {
@@ -154,33 +146,29 @@ export function Home() {
         console.error("Erro ao atualizar condições:", error);
       });
   };
-  console.log(formData);
 
-  const handleAcceptTerms = async () => {
+  // const handleAcceptTerms = async () => {
     
-    const { armazenamentoDados, pagamentoDados } = formData.termos;
-    const atLeastOneRequiredAccepted = armazenamentoDados && pagamentoDados;
-    console.log(formData)
-    const allAccepted = armazenamentoDados && pagamentoDados;
-    formData.termos.armazenamentoDados = true
-    formData.termos.pagamentoDados = true
+  //   const { armazenamentoDados, pagamentoDados } = formData.resposta[0];
+  //   const atLeastOneRequiredAccepted = armazenamentoDados && pagamentoDados;
+  //   const allAccepted = armazenamentoDados && pagamentoDados;
+  //   formData.termos.armazenamentoDados = true
+  //   formData.termos.pagamentoDados = true
     
-    if (formData.termos.armazenamentoDados === true && formData.termos.pagamentoDados === true) {
-      console.log("aquicarai")
-      setShowModal(false);
-      setAllTermsAccepted(allAccepted);
+  //   if (formData.termos.armazenamentoDados === true && formData.termos.pagamentoDados === true) {
+  //     setShowModal(false);
+  //     setAllTermsAccepted(allAccepted);
   
-      const userData = localStorage.getItem("usuario");
-      if (userData !== null) {
-        const userObject = JSON.parse(userData);
-        const userId = userObject.id;
+  //     if (userData) {
+  //       const userObject = JSON.parse(userData);
+  //       const userId = userObject.id;
   
-        updateUserConditions(userId, formData.termos);
-      }
-    } else {
-      navigate('/');
-    }
-  };
+  //       updateUserConditions(userId, formData.termos);
+  //     }
+  //   } else {
+  //     navigate('/');
+  //   }
+  // };
   
 
   const getUserId = (userData: string | null) => {
@@ -220,7 +208,7 @@ export function Home() {
           }}
           formData={formData}
           setFormData={setFormData}
-          OnAccept={()=>[setFormData((FormData) => ({
+/*           OnAccept={()=>[setFormData((FormData) => ({
             ...FormData,
             termos: {
               ...FormData.termos,
@@ -230,7 +218,10 @@ export function Home() {
               envioEmail: formData.termos.envioEmail !== undefined ? formData.termos.envioEmail : false,
               envioSms: formData.termos.envioSms !== undefined ? formData.termos.envioSms : false,
             },
-          })), handleAcceptTerms()]}
+          })), handleAcceptTerms()]} */
+          OnAccept={() => {
+            console.log("Condições do usuário");
+          }}
           OnReject={() => {
             setShowModal(false);
           }}

@@ -12,7 +12,7 @@ export function ModalEdit(props: IModal) {
     const [modalShow, setModalShow] = useState(false);
     const [validated, setValidated] = useState(false);
     const userData: string | null = localStorage.getItem("usuario");
-    const userObject = JSON.parse(userData || "{}") as UserData ;
+    const userObject = JSON.parse(userData || "{}") as UserData;
     const [formData, setFormData] = useState({
         nome: '',
         email: '',
@@ -32,20 +32,20 @@ export function ModalEdit(props: IModal) {
     });
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-    
+
         let formattedValue = value;
-    
+
         // Verifica se o campo é 'dataNascimento'
         if (name === 'dataNascimento') {
             formattedValue = formatMyDate(value);
         }
-    
+
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: formattedValue,
         }));
     };
-    
+
     // Função para formatar a data, ajuste conforme necessário
     const formatMyDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -54,26 +54,26 @@ export function ModalEdit(props: IModal) {
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-    
+
     const getUserId = (userData: string) => {
         const userObject = JSON.parse(userData);
         return userObject.id;
-    
-      };
+
+    };
 
     const handleSubmit = async (event: any) => {
         const form = event.currentTarget;
         event.preventDefault();
         event.stopPropagation();
-        
+/* 
         if (!termoData.termos.armazenamentoDados) {
             alert("Você precisa aceitar o armazenamento de dados para prosseguir.");
             return; // Evitar a submissão do formulário se o check não estiver marcado
         }
-        
+ */
         try {
-            const response = await axios.put(`http://localhost:5000/user/update/${userObject.id}`, formData);
-            const resposta = await axios.put(`http://localhost:5000/user/updateConditions/${userObject.id}`, termoData);
+            const response = await axios.put(`http://localhost:7890/user/update/${userObject.id}`, formData);
+            const resposta = await axios.put(`http://localhost:7890/user/updateConditions/${userObject.id}`, termoData);
         } catch (error) {
             console.error('Erro ao enviar dados:', error);
         } finally {
@@ -84,7 +84,7 @@ export function ModalEdit(props: IModal) {
         }
     };
 
-    useEffect (() => {
+   /*  useEffect(() => {
         if (props.formData && props.formData.resposta && Array.isArray(props.formData.resposta) && props.formData.resposta.length > 0) {
             const lastResponse = props.formData.resposta[props.formData.resposta.length - 1];
             if (lastResponse) {
@@ -107,7 +107,7 @@ export function ModalEdit(props: IModal) {
             senha: props.formData.senha,
             cpf: props.formData.cpf,
         })
-    }, [props.formData])
+    }, [props.formData]) */
 
     return (
         <>
@@ -124,7 +124,7 @@ export function ModalEdit(props: IModal) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+{/*                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Input
                             label={"Nome"}
                             type={"text"}
@@ -158,7 +158,7 @@ export function ModalEdit(props: IModal) {
                             name={"telefone"}
                             value={formData.telefone}
                         />
-{/*                         <Input
+                        <Input
                             label={"Email"}
                             type={"email"}
                             placeholder={"example@example.com"}
@@ -168,7 +168,7 @@ export function ModalEdit(props: IModal) {
                             onChange={handleInputChange}
                             name={"email"}
                             value={formData.email}
-                        /> */}
+                        />
                         <Form.Check
                             type="switch"
                             id="aceitarDados"
@@ -238,12 +238,12 @@ export function ModalEdit(props: IModal) {
                             }}
                             className="custom-switch"
                         />
-                        <Botao 
-                            label="Salvar" 
-                            id="signup-btn" 
-                            type="submit" 
+                        <Botao
+                            label="Salvar"
+                            id="signup-btn"
+                            type="submit"
                         />
-                    </Form>
+                    </Form> */}
                 </Modal.Body>
 
             </Modal>

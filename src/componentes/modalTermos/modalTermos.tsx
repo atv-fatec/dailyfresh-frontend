@@ -5,6 +5,7 @@ import "./modal.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserData } from "../../interface/dadosUsuario";
+import Cookies from "js-cookie";
 
 export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
     const { formData, setFormData } = props;
@@ -13,7 +14,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
     const [mensagem, setMensagem] = useState<string>("");
     const [data, setData] = useState<string>("");
     const [versao, setVersao] = useState<string>("");
-    const userData: string | null = localStorage.getItem("usuario");
+    const userData = Cookies.get("usuario");
     const userObject = JSON.parse(userData || "{}") as UserData ;
 
     useEffect(() => {
@@ -22,6 +23,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 // Obter o ID mais recente
                 const idResponse = await axios.get('http://localhost:5000/term/readLatest');
                 const id = idResponse.data.latestTermId;
+                console.log("ID do termo mais recente:", id);
 
                 // Verificar se há um ID válido
                 if (id !== null && id !== undefined) {
@@ -52,7 +54,6 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
         fetchData();
     }, []);
     const navigate = useNavigate();
-
     const handleAceitar = () => {
         const updatedFormData = {
             ...formData,
@@ -83,7 +84,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
     };
 
     const handleRecusar = () => {
-        const updatedFormData = {
+/*         const updatedFormData = {
             ...formData,
             termos: {
                 armazenamentoDados: false,
@@ -94,7 +95,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
             }
         };
         handleDelete();
-        setFormData(updatedFormData);
+        setFormData(updatedFormData); */
         props.OnHide();
         navigate("/");
     };
@@ -120,8 +121,8 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                             type="switch"
                             id="aceitarDados"
                             label="Aceitar armazenamento de dados e armazenamento de dados de pagamento (obrigatórios)"
-                            checked={formData.termos.armazenamentoDados}
-                            onChange={() => {
+                            /* checked={formData.termos.armazenamentoDados} */
+/*                             onChange={() => {
                                 const updatedFormData = {
                                     ...formData,
                                     termos: {
@@ -131,15 +132,15 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                                     }
                                 };
                                 setFormData(updatedFormData);
-                            }}
+                            }} */
                             className="custom-switch"
                         />
                         <Form.Check
                             type="switch"
                             id="aceitarSMS"
                             label="Aceitar receber SMS"
-                            checked={formData.termos.envioSms}
-                            onChange={() => {
+                            /* checked={formData.termos.envioSms} */
+/*                             onChange={() => {
                                 const updatedFormData = {
                                     ...formData,
                                     termos: {
@@ -148,15 +149,15 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                                     }
                                 };
                                 setFormData(updatedFormData);
-                            }}
+                            }} */
                             className="custom-switch"
                         />
                         <Form.Check
                             type="switch"
                             id="aceitarEmail"
                             label="Aceitar receber emails"
-                            checked={formData.termos.envioEmail}
-                            onChange={() => {
+                            /* checked={formData.termos.envioEmail} */
+/*                             onChange={() => {
                                 const updatedFormData = {
                                     ...formData,
                                     termos: {
@@ -165,15 +166,15 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                                     }
                                 };
                                 setFormData(updatedFormData);
-                            }}
+                            }} */
                             className="custom-switch"
                         />
                         <Form.Check
                             type="switch"
                             id="aceitarPropaganda"
                             label="Aceitar receber propaganda"
-                            checked={formData.termos.propagandas}
-                            onChange={() => {
+                            /* checked={formData.termos.propagandas} */
+/*                             onChange={() => {
                                 const updatedFormData = {
                                     ...formData,
                                     termos: {
@@ -182,7 +183,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                                     }
                                 };
                                 setFormData(updatedFormData);
-                            }}
+                            }} */
                             className="custom-switch"
                         />
                     </Form>

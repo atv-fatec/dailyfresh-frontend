@@ -6,6 +6,7 @@ import { branco } from "../../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export function Login() {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ export function Login() {
                 const response = await handleLogin(event.target.idEmail.value, event.target.idSenha.value);
                 
                 const userData = JSON.stringify(response.data);
-                localStorage.setItem("usuario", userData);
+                Cookies.set("usuario", userData, { expires: 7 });
                 navigate("/home");
             } catch (error) {
                 console.error(error);
