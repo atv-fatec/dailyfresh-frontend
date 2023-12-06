@@ -24,9 +24,11 @@ export function Cadastro() {
         condicoes: [] as any[],     
         meios: [] as any[], 
     });
+    const [termosData, setTermosData] = useState({versao: '', mensagem: ''});
     const [obrigatoriosTermo, setObrigatoriosTermo] = useState<string[]>([]);
     const [condicoesTermo, setCondicoesTermo] = useState<string[]>([]);
     const [meiosTermo, setMeiosTermo] = useState<string[]>([]);
+    const [modalShow, setModalShow] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,7 +39,8 @@ export function Cadastro() {
 
                 const termResponse = await axios.get(`http://localhost:5000/term/read/${id}`);
                 const termo = termResponse.data;
-                console.log(termo.data.obrigatorios.split(','))
+                setTermosData(termo.data);
+                console.log("ESSE AQUI!",termo.data)
                 setObrigatoriosTermo(termo.data.obrigatorios.split(','));
                 setCondicoesTermo(termo.data.condicoes.split(','));
                 setMeiosTermo(termo.data.meios.split(','));
@@ -229,7 +232,7 @@ export function Cadastro() {
                                     onChange={handleInputChange}
                                  />
 
-                                <h4>Ao se cadastrar, você concorda com os termos:</h4>
+                                <h4 className="cadastro-subtitle">Ao se cadastrar, você concorda com os seguintes termos e condições:</h4>
                                  {obrigatoriosTermo.map((item, index) => (
                                     <Form.Check
                                         onChange={(e) => handleCheckboxChangeObrigatorios(e)}
@@ -239,6 +242,7 @@ export function Cadastro() {
                                         name={`obrigatorios-${index}`}
                                         type="checkbox"
                                         id={`seila-${index + 1}`}
+                                        className="cadastro-check"
                                     />
                                 ))}
                                 {condicoesTermo.map((item, index) => (
@@ -249,10 +253,11 @@ export function Cadastro() {
                                         name={`condicoes-${index}`}
                                         type="checkbox"
                                         id={`seila-condicoes-${index + 1}`}
+                                        className="cadastro-check"
                                     />
                                 ))}
-
-                                <h4>Ao se cadastrar, você concorda receber notícias e propagandar por:</h4>
+                                <hr/>
+                                <h4 className="cadastro-subtitle">Ao se cadastrar, você concorda receber notícias e propagandar por:</h4>
                                 {meiosTermo.map((item, index) => (
                                     <Form.Check
                                         key={index}
@@ -261,8 +266,29 @@ export function Cadastro() {
                                         name={`meios-${index}`}
                                         type="checkbox"
                                         id={`seila-meios-${index + 1}`}
+                                        className="cadastro-check"
                                     />
                                 ))}
+                                <a onClick={() => setModalShow(true)}>Ler Termos e Condições</a>
+                                {termosData &&(
+                                <Modal
+                                    size="lg"
+                                    aria-labelledby="contained-modal-title-vcenter"
+                                    centered
+                                    show={modalShow}
+                                    onClick={() => setModalShow(false)}
+                                >
+                                    <Modal.Header closeButton>
+                                        <Modal.Title id="contained-modal-title-vcenter">
+                                            Termos e Condições {termosData.versao} 
+                                        </Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <p>
+                                            {termosData.mensagem} 
+                                        </p>
+                                    </Modal.Body>
+                                </Modal>)}
                                 <Botao 
                                     label="Sign Up" 
                                     id="signup-btn" 
@@ -274,6 +300,8 @@ export function Cadastro() {
                     </div>
                 </Col>
             </Row>
+
+           
         </>
     );
 }
