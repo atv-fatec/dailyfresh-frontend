@@ -26,6 +26,7 @@ export function Login() {
                 
                 const userData = JSON.stringify(response.data);
                 Cookies.set("usuario", userData, { expires: 7 });
+                console.log(userData)
                 navigate("/home");
             } catch (error) {
                 console.error(error);
