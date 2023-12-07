@@ -115,6 +115,8 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 if (userId) {    
                     const response = await axios.put(`http://localhost:5000/user/updateConditions/${userId}`, formChecks);
                     console.log("AAAAAAAAAAAAHHH")
+                } else{
+                    console.log("Erro")
                 }
             } catch (error: any) {
                 alert(error.response.data.error);

@@ -123,8 +123,8 @@ export function ModalEdit(props: IModal) {
             setValidated(true);
         } else{
             try {
-                await axios.put(`http://localhost:2222/user/update/${userObject.id}`, formData);
-                await axios.put(`http://localhost:2222/user/updateConditions/${userObject.id}`, {obrigatorios: formData.obrigatorios, condicoes: formData.condicoes, meios: formData.meios});
+                await axios.put(`http://localhost:5000/user/update/${userObject.id}`, formData);
+                await axios.put(`http://localhost:5000/user/updateConditions/${userObject.id}`, {obrigatorios: formData.obrigatorios, condicoes: formData.condicoes, meios: formData.meios});
             } catch (error) {
                 console.error('Erro ao enviar dados:', error);
             } finally {
@@ -139,11 +139,11 @@ export function ModalEdit(props: IModal) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const idResponse = await axios.get('http://localhost:2222/term/readLatest');
+                const idResponse = await axios.get('http://localhost:5000/term/readLatest');
                 const id = idResponse.data.latestTermId;
                 console.log(id)
 
-                const termResponse = await axios.get(`http://localhost:2222/term/read/${id}`);
+                const termResponse = await axios.get(`http://localhost:5000/term/read/${id}`);
                 const termo = termResponse.data;
                 setObrigatoriosTermo(termo.data.obrigatorios.split(','));
                 setCondicoesTermo(termo.data.condicoes.split(','));

@@ -49,7 +49,7 @@ export function Login() {
                 email,
                 senha
             });
-    
+            
             return response;
         } catch (error:any) {
             alert(error.response.data.error)
@@ -58,16 +58,14 @@ export function Login() {
                 const response = await axios.post("http://localhost:5000/user/getByEmail", {
                     email
                 });
-                setDadosUser(response.data.id);
-                console.log("AQUI", response.data)
+                setDadosUser(response.data.data.id);
+                console.log("AQUI", response.data.data.id)
             } else{
                 alert(error.response.data.error)
             }
             throw error;
         }
     }
-
-
 
     return(
         <>
@@ -76,7 +74,8 @@ export function Login() {
                 OnHide={() => setModalShow(false)}
                 OnAccept={() => setModalShow(false)}
                 OnReject={() => setModalShow(false)}
-                formData={undefined} setFormData={undefined} userId={dadosUser}            />
+                formData={undefined} setFormData={undefined} userId={dadosUser}            
+            />
             <Row className="login-row">
                 <Col>
                     <div className="login-image"></div>

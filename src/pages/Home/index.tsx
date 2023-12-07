@@ -198,35 +198,6 @@ export function Home() {
         </Container>
       </div>
       <Container className="home-container">
-      {showModal && (
-        <ModalTermos
-          Show={showModal}
-          OnHide={() => {
-            if (allTermsAccepted) {
-              setShowModal(false);
-            }
-          }}
-          formData={formData}
-          setFormData={setFormData}
-/*           OnAccept={()=>[setFormData((FormData) => ({
-            ...FormData,
-            termos: {
-              ...FormData.termos,
-              armazenamentoDados: true,
-              pagamentoDados: true,
-              propagandas: formData.termos.propagandas !== undefined ? formData.termos.propagandas : false,
-              envioEmail: formData.termos.envioEmail !== undefined ? formData.termos.envioEmail : false,
-              envioSms: formData.termos.envioSms !== undefined ? formData.termos.envioSms : false,
-            },
-          })), handleAcceptTerms()]} */
-          OnAccept={() => {
-            console.log("Condições do usuário");
-          }}
-          OnReject={() => {
-            setShowModal(false);
-          }}
-        />
-      )}
         <Row>
           {pratos.map(({ nome, preco, imagem }, index) => {
             return (
