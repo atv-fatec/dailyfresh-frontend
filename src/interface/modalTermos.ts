@@ -3,4 +3,5 @@ export interface IModalTermos{
     OnHide: () => void;
     OnAccept: () => void;
     OnReject: () => void;
+    userId: number | undefined;
 }

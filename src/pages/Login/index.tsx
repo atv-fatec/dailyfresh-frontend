@@ -14,6 +14,12 @@ export function Login() {
     const [validated, setValidated] = useState(false);
     const [loginError, setLoginError] = useState("");
     const [modalShow, setModalShow] = useState(false);
+    const [dadosUser, setDadosUser] = useState();
+    const [formChecks, setFormChecks] = useState({
+        obrigatorios: [] as boolean[], 
+        condicoes: [] as boolean[],     
+        meios: [] as boolean[], 
+    });
 
     const handleSubmit = async (event: any) => {
         const form = event.currentTarget;
@@ -48,9 +54,12 @@ export function Login() {
         } catch (error:any) {
             alert(error.response.data.error)
             if(error.response.status === 401 && error.response.data.error==="Por favor, concorde com o último termo."){
-                alert(error.response.data.error)
                 setModalShow(true)
-                console.log("AQUI")
+                const response = await axios.post("http://localhost:5000/user/getByEmail", {
+                    email
+                });
+                setDadosUser(response.data.id);
+                console.log("AQUI", response.data)
             } else{
                 alert(error.response.data.error)
             }
@@ -58,18 +67,16 @@ export function Login() {
         }
     }
 
+
+
     return(
         <>
             <ModalTermos 
-                Show={modalShow} 
-                OnHide={function (): void {
-                    throw new Error("Function not implemented.");
-                } } OnAccept={function (): void {
-                    throw new Error("Function not implemented.");
-                } } OnReject={function (): void {
-                    throw new Error("Function not implemented.");
-                } } formData={undefined} setFormData={undefined}
-            />
+                Show={modalShow}
+                OnHide={() => setModalShow(false)}
+                OnAccept={() => setModalShow(false)}
+                OnReject={() => setModalShow(false)}
+                formData={undefined} setFormData={undefined} userId={dadosUser}            />
             <Row className="login-row">
                 <Col>
                     <div className="login-image"></div>

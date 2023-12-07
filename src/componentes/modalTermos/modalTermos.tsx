@@ -8,10 +8,10 @@ import { UserData } from "../../interface/dadosUsuario";
 import Cookies from "js-cookie";
 
 export function ModalTermos(props: IModalTermos & { formData: any; setFormData: any }) {
-    const [formData, setFormData] = useState({
-        obrigatorios: [] as any[], 
-        condicoes: [] as any[],     
-        meios: [] as any[], 
+    const [formChecks, setFormChecks] = useState({
+        obrigatorios: [] as boolean[], 
+        condicoes: [] as boolean[],     
+        meios: [] as boolean[], 
     });
     const [validated, setValidated] = useState(false);
     const userData = Cookies.get("usuario");
@@ -35,7 +35,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                 setObrigatoriosTermo(termo.data.obrigatorios.split(','));
                 setCondicoesTermo(termo.data.condicoes.split(','));
                 setMeiosTermo(termo.data.meios.split(','));
-                setFormData({...formData, obrigatorios: termo.data.obrigatorios.split(',').map((term: any)=> false), condicoes: termo.data.condicoes.split(',').map((term: any)=> false), meios: termo.data.meios.split(',').map((term: any)=> false)})  
+                setFormChecks({...formChecks, obrigatorios: termo.data.obrigatorios.split(',').map((term: any)=> false), condicoes: termo.data.condicoes.split(',').map((term: any)=> false), meios: termo.data.meios.split(',').map((term: any)=> false)})  
 
             } catch (error) {
                 console.error('Erro ao obter dados do termo mais recente:', error);
@@ -53,9 +53,9 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
         index = parseInt(index)
         const value = event.target.checked 
         
-        setFormData({
-            ...formData,
-            obrigatorios: formData.obrigatorios.map((item: any, i: any) => {
+        setFormChecks({
+            ...formChecks,
+            obrigatorios: formChecks.obrigatorios.map((item: any, i: any) => {
                 if (i == index) {
                     return value; 
                 }
@@ -72,9 +72,9 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
         index = parseInt(index)
         const value = event.target.checked 
         
-        setFormData({
-            ...formData,
-            condicoes: formData.condicoes.map((item: any, i: any) => {
+        setFormChecks({
+            ...formChecks,
+            condicoes: formChecks.condicoes.map((item: any, i: any) => {
                 if (i == index) {
                     return value; 
                 }
@@ -89,9 +89,9 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
         index = parseInt(index)
         const value = event.target.checked 
         
-        setFormData({
-            ...formData,
-            meios: formData.meios.map((item: any, i: any) => {
+        setFormChecks({
+            ...formChecks,
+            meios: formChecks.meios.map((item: any, i: any) => {
                 if (i == index) {
                     return value; 
                 }
@@ -100,8 +100,31 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
         });
     }
 
-    const handleAceitar = () => {
+    const userId = props.userId; // Use const para evitar reatribuição
+
+    const handleSubmit= async (formChecks: any, event: any) => {
+        const form = event.currentTarget;
+        if(form.checkValidity() === false){
+            event.preventDefault();
+            event.stopPropagation();
+            setValidated(true);
+        }else{
+            event.preventDefault();
+            console.log("AAAAAAAAAAAAHHH")
+            try {
+                if (userId) {    
+                    const response = await axios.put(`http://localhost:5000/user/updateConditions/${userId}`, formChecks);
+                    console.log("AAAAAAAAAAAAHHH")
+                }
+            } catch (error: any) {
+                alert(error.response.data.error);
+            }
+        }
         
+    }
+
+    const handleAceitar = () => {
+        props.OnAccept();
     };
 
     return (
@@ -123,7 +146,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                     <Modal.Body>
                         <p className="termo">{termosData.mensagem}</p>
                         <hr/>
-                        <Form noValidate validated={validated}>
+                        <Form noValidate validated={validated} onSubmit={(event) => handleSubmit(formChecks, event)}>
                         <h4 className="cadastro-subtitle">Ao se cadastrar, você concorda com os seguintes termos e condições:</h4>
                             {obrigatoriosTermo.map((item, index) => (
                                 <Form.Check
@@ -161,11 +184,9 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                                     className="cadastro-check"
                                 />
                             ))}
+                            <Button className="btn-aceitar" type="submit" id="signup-btn" >Enviar</Button>
                         </Form>
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={handleAceitar} className="btn-aceitar" type="submit">Enviar</Button>
-                    </Modal.Footer>
                     </>
                 )}
             </Modal>
