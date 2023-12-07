@@ -31,3 +31,12 @@
     color: #FF8552 !important;
     text-align: center;
 }
+
+.cadastro-subtitle{
+    font-family: 'Questrial', sans-serif !important;
+    color: #297373;
+}
+
+.cadastro-check{
+    font-family: 'Questrial', sans-serif !important;
+}
