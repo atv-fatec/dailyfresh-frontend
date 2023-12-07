@@ -149,7 +149,7 @@ export function ModalEdit(props: IModal) {
                 setCondicoesTermo(termo.data.condicoes.split(','));
                 setMeiosTermo(termo.data.meios.split(','));
                 setFormData({...formData, obrigatorios: termo.data.obrigatorios.split(',').map((term: any)=> false), condicoes: termo.data.condicoes.split(',').map((term: any)=> false), meios: termo.data.meios.split(',').map((term: any)=> false)})  
-
+                
             } catch (error) {
                 console.error('Erro ao obter dados do termo mais recente:', error);
             }

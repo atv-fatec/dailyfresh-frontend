@@ -114,7 +114,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
             try {
                 if (userId) {    
                     const response = await axios.put(`http://localhost:5000/user/updateConditions/${userId}`, formChecks);
-                    console.log("AAAAAAAAAAAAHHH")
+                    alert("Termos e condições aceitos com sucesso!")
                 } else{
                     console.log("Erro")
                 }
@@ -124,10 +124,6 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
         }
         
     }
-
-    const handleAceitar = () => {
-        props.OnAccept();
-    };
 
     return (
         <>
@@ -186,7 +182,7 @@ export function ModalTermos(props: IModalTermos & { formData: any; setFormData: 
                                     className="cadastro-check"
                                 />
                             ))}
-                            <Button className="btn-aceitar" type="submit" id="signup-btn" >Enviar</Button>
+                            <Button className="btn-aceitar" type="submit" id="signup-btn">Enviar</Button>
                         </Form>
                     </Modal.Body>
                     </>

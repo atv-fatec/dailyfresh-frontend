@@ -60,8 +60,6 @@ export function Login() {
                 });
                 setDadosUser(response.data.data.id);
                 console.log("AQUI", response.data.data.id)
-            } else{
-                alert(error.response.data.error)
             }
             throw error;
         }
